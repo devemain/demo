@@ -1,0 +1,21 @@
+# ============================================================================
+# 2025 DeveMain
+#
+# All rights reserved. For internal use only.
+# Unauthorized copying, modification, or distribution is prohibited.
+#
+# @author    DeveMain <devemain@gmail.com>
+# @copyright 2025 DeveMain
+# @license   PROPRIETARY
+# @link      https://github.com/DeveMain
+# ============================================================================
+
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "0:80"
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
