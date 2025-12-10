@@ -1,3 +1,14 @@
+## [1.0.3](https://github.com/devemain/demo/compare/v1.0.2...v1.0.3) (2025-12-10)
+
+### ✨ Improvements
+
+* remove #[Pure] attribute for cross-IDE compatibility ([c5347b3](https://github.com/devemain/demo/commit/c5347b306ac0af10755bd9e28e215dba465c018a))
+
+### ✅ Tests
+
+* deploy hook ([0c38984](https://github.com/devemain/demo/commit/0c38984265a680557f0ad6540df2d86fc6fcc70b))
+* deploy hook ([c54a132](https://github.com/devemain/demo/commit/c54a132db2d57a8b6aac3677887866c0148f1c9e))
+
 ## [1.0.2](https://github.com/devemain/demo/compare/v1.0.1...v1.0.2) (2025-12-10)
 
 ### 🐛 Bug Fixes
