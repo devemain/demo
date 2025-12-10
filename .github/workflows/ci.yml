@@ -19,6 +19,7 @@ on:
       - 'CHANGELOG.md'
       - 'package.json'
       - 'package-lock.json'
+
 jobs:
   release:
     if: |
