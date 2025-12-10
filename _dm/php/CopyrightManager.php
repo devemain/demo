@@ -13,7 +13,6 @@
 
 namespace Devemain;
 
-use JetBrains\PhpStorm\Pure;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
@@ -25,7 +24,6 @@ class CopyrightManager
     private array $extensions;
     private array $rootFiles;
 
-    #[Pure]
     public function __construct(private CliHelper $cli)
     {
         $this->year = date('Y');

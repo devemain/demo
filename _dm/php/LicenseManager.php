@@ -13,15 +13,12 @@
 
 namespace Devemain;
 
-use JetBrains\PhpStorm\Pure;
-
 class LicenseManager
 {
     private string $year;
     private string $licenseTemplate;
     private string $path;
 
-    #[Pure]
     public function __construct(private CliHelper $cli)
     {
         $this->year = date('Y');
