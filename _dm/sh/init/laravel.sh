@@ -40,7 +40,7 @@ setup_laravel() {
     fi
 
     # Ask about migrations
-    if ask_yes_no "Run database migrations?" "n"; then
+    if [[ ! "$OPTION" =~ ^(-q|--quiet)$ ]] && ask_yes_no "Run database migrations?" "n"; then
         print_loading_frame "Running migrations"
         php artisan migrate --force
         print_success_frame "Migrations completed"
@@ -59,8 +59,10 @@ setup_laravel() {
 setup_permissions() {
     # Check cache permissions
     print_frame_middle "Check permissions for project"
-    if [[ ! "$OPTION" =~ ^(-q|--quiet)$ ]]; then
+    if [[ ! "$OPTION" =~ ^(-q|--quiet)$ ]] && command -v sudo &> /dev/null; then
         sudo chown -R "$USER":www-data .
+    else
+        chown -R "$USER":www-data . 2>/dev/null
     fi
     print_success_frame "Permissions set"
 
