@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/devemain/demo/compare/v1.0.0...v1.0.1) (2025-12-10)
+
+### ✨ Improvements
+
+* update Laravel initialization script ([419ad28](https://github.com/devemain/demo/commit/419ad2829cac02df1055fdfd10ec63af1840a384))
+
 ## 1.0.0 (2025-12-09)
 
 ### 🚀 Features
