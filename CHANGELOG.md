@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/devemain/demo/compare/v1.0.1...v1.0.2) (2025-12-10)
+
+### 🐛 Bug Fixes
+
+* update live demo link ([e532e07](https://github.com/devemain/demo/commit/e532e07a00ad0d812e3abe87063bdd0b935fdf53))
+
 ## [1.0.1](https://github.com/devemain/demo/compare/v1.0.0...v1.0.1) (2025-12-10)
 
 ### ✨ Improvements
