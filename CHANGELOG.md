@@ -1,3 +1,18 @@
+## [1.1.0](https://github.com/devemain/demo/compare/v1.0.3...v1.1.0) (2025-12-18)
+
+### 🚀 Features
+
+* introduce AI API, add groq service, add model and controller for facts ([ea418d4](https://github.com/devemain/demo/commit/ea418d40b1969608255f8daf814dcea9f940f13d))
+
+### ✨ Improvements
+
+* add logger service, safe upsert service, error handler ([00d193b](https://github.com/devemain/demo/commit/00d193b97a0f3c75f027edaec330cb7be2b2c2c6))
+
+### 🔧 CI/CD
+
+* install nodejs/npm, proper separation of dependencies ([b07f770](https://github.com/devemain/demo/commit/b07f770b4a9919deba045036f0e23ca089199259))
+* update deploy.sh and laravel.sh scripts ([d71a585](https://github.com/devemain/demo/commit/d71a5857340b89a165b79f1f67c9d626cc21457c))
+
 ## [1.0.3](https://github.com/devemain/demo/compare/v1.0.2...v1.0.3) (2025-12-10)
 
 ### ✨ Improvements
