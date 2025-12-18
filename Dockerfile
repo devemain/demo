@@ -20,6 +20,8 @@ RUN apt-get update && apt-get install -y \
     nginx \
     # SQLite DB
     libsqlite3-dev \
+    # Node.js
+    nodejs npm \
     # PHP extensions
     && docker-php-ext-install pdo pdo_sqlite mbstring xml zip \
     # Clear cache
