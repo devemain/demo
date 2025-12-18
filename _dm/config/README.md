@@ -9,7 +9,7 @@
 A professional Laravel project template showcasing modern development practices, Docker setup, and automation tools. Perfect for starting new projects with best practices already configured.
 
 ## Live Demo
-**[View Live Demo](https://demo-s9hx.onrender.com)**
+**[View Live Demo](https://demo-xbqd.onrender.com)**
 
 *Note: This project is hosted on Render's Free plan, which has significant limitations.*
 
