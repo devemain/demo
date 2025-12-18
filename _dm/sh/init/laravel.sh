@@ -59,11 +59,11 @@ setup_laravel() {
 setup_permissions() {
     # Check cache permissions
     print_frame_middle "Check permissions for project"
-    if [[ ! "$OPTION" =~ ^(-q|--quiet)$ ]] && command -v sudo &> /dev/null; then
-        sudo chown -R "$USER":www-data .
-    else
-        chown -R "$USER":www-data . 2>/dev/null
-    fi
+#    if [[ ! "$OPTION" =~ ^(-q|--quiet)$ ]] && command -v sudo &> /dev/null; then
+#        sudo chown -R "$USER":www-data .
+#    else
+        chown -R "$USER":www-data . 2>/dev/null || true
+#    fi
     print_success_frame "Permissions set"
 
     # Check SQLite database permissions

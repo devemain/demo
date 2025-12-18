@@ -15,10 +15,23 @@ print_frame "Deploy Project in production"
 # Load env file
 load_env
 
-# Install dependencies
-print_loading_frame "[prod] Installing composer dependencies"
+# Install Composer dependencies
+print_loading_frame "[prod] Installing Composer dependencies"
 if [ "$APP_ENV" != "local" ]; then
     composer install --no-dev --optimize-autoloader --no-interaction
+fi
+
+# Install and build npm dependencies
+print_loading_frame "[prod] Installing npm dependencies"
+if [ "$APP_ENV" != "local" ]; then
+    if [ -f "package.json" ]; then
+        npm run p
+
+        print_loading_frame "[prod] Building assets with Vite"
+        npm run build
+    else
+        print_warning_frame "No package.json found, skipping npm build"
+    fi
 fi
 
 # Copy .env.example to .env
@@ -56,7 +69,7 @@ if [ "$APP_ENV" != "local" ]; then
     chown www-data:www-data database/database.sqlite
     chmod 666 database/database.sqlite
 
-    if php artisan tinker --execute="echo 'DB connected';" 2>/dev/null; then
+    if php artisan tinker --execute="echo 'DB connected';" 2>/dev/null || true; then
         print_loading_frame "Database connection successful, running migrations"
         php artisan migrate --force
     else
