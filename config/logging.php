@@ -5,6 +5,15 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
+function makeDailyChannel(string $name): array {
+    return [
+        'driver' => 'daily',
+        'path' => storage_path('logs/' . date('Y/m/') . $name . '.log'),
+        'level' => 'debug',
+        'days' => 31,
+    ];
+}
+
 return [
 
     /*
@@ -60,14 +69,14 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/kernel/kernel.log'), // Custom
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/kernel/kernel.log'), // Custom
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
@@ -124,8 +133,19 @@ return [
         ],
 
         'emergency' => [
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/kernel/kernel.log'), // Custom
         ],
+
+
+        // Custom
+        'debug' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/debug/debug.log'),
+            'level' => 'debug',
+        ],
+        'api-admin' => makeDailyChannel('api-admin'),
+        'api-v1' => makeDailyChannel('api-v1'),
+        'service' => makeDailyChannel('service'),
 
     ],
 
