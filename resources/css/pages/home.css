@@ -1,0 +1,47 @@
+/*!
+ * 2025 DeveMain
+ *
+ * All rights reserved. For internal use only.
+ * Unauthorized copying, modification, or distribution is prohibited.
+ *
+ * @author    DeveMain <devemain@gmail.com>
+ * @copyright 2025 DeveMain
+ * @license   PROPRIETARY
+ * @link      https://github.com/DeveMain
+ */
+
+.blink {
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+@keyframes blink {
+    0%   { opacity: 0.2; }
+    25%  { opacity: 0.4; }
+    50%  { opacity: 0.6; }
+    75%  { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+.fact {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    padding: 1rem;
+    border-left: 4px solid #3498db;
+    background: #f8f9fa;
+    border-radius: 0 0.5rem 0.5rem 0;
+    margin: 0;
+    transition: all 0.3s ease;
+    text-align: justify;
+}
+.fact.placeholder-fact {
+    font-family: monospace;
+    opacity: 0.7;
+}
+.fact.loading {
+    opacity: 0.5;
+}
+.fact-error {
+    color: #e74c3c;
+    border-left-color: #e74c3c;
+    background: #fee;
+}

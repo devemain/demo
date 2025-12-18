@@ -1,0 +1,52 @@
+/*!
+ * 2025 DeveMain
+ *
+ * All rights reserved. For internal use only.
+ * Unauthorized copying, modification, or distribution is prohibited.
+ *
+ * @author    DeveMain <devemain@gmail.com>
+ * @copyright 2025 DeveMain
+ * @license   PROPRIETARY
+ * @link      https://github.com/DeveMain
+ */
+
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    padding-top: 4rem;
+}
+main {
+    flex: 1 0 auto;
+}
+footer {
+    flex-shrink: 0;
+}
+.logo {
+    animation: hoverFloat 2s infinite ease-in-out;
+}
+@keyframes hoverFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+.active-link {
+    color: #0437a5;
+    font-weight: 600;
+    position: relative;
+}
+.active-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #0437a5;
+    border-radius: 1px;
+}
+button:not(.no-transform):hover, a:not(.no-transform):hover, .fact-card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s;
+}

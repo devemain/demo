@@ -11,6 +11,11 @@
  */
 
 @import 'tailwindcss';
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+/* Custom */
+@import './_common.css';
+@import './pages/home.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

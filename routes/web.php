@@ -11,13 +11,23 @@
  * @link      https://github.com/DeveMain
  */
 
+use App\Http\Controllers\FactsController;
 use Illuminate\Support\Facades\Route;
 
+// Home
 Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/test', function() {
+// Facts
+Route::prefix('facts')->as('facts.')->group(function () {
+    Route::get('', [FactsController::class, 'index'])->name('index');
+    Route::get('stats', [FactsController::class, 'stats'])->name('stats');
+    Route::get('search', [FactsController::class, 'search'])->name('search');
+});
+
+// Test
+Route::get('test', function() {
     $paths = [
         'storage' => is_writable(storage_path()),
         'storage/framework' => is_writable(storage_path('framework')),
