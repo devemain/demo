@@ -1,3 +1,9 @@
+## [1.1.2](https://github.com/devemain/demo/compare/v1.1.1...v1.1.2) (2025-12-19)
+
+### ✨ Improvements
+
+* add menu and builder service providers ([f344990](https://github.com/devemain/demo/commit/f344990cf49cefc119b92887650825a340dc1b63))
+
 ## [1.1.1](https://github.com/devemain/demo/compare/v1.1.0...v1.1.1) (2025-12-18)
 
 ### 🐛 Bug Fixes
