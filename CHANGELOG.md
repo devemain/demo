@@ -1,3 +1,9 @@
+## [1.1.5](https://github.com/devemain/demo/compare/v1.1.4...v1.1.5) (2025-12-19)
+
+### ✨ Improvements
+
+* add cd.yml, add AppVersionBadge view component ([ced92a9](https://github.com/devemain/demo/commit/ced92a930c463759e424ac63ea2807779f078abd))
+
 ## [1.1.4](https://github.com/devemain/demo/compare/v1.1.3...v1.1.4) (2025-12-19)
 
 ### ✨ Improvements
