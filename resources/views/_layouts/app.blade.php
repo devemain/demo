@@ -34,15 +34,17 @@
                 </a>
             </div>
             <div class="hidden md:flex items-center space-x-6">
-                <a href="{{ url('/') }}" class="px-3 py-2 {{ request()->is('/') ? 'active-link' : 'text-gray-700 hover:text-blue-800' }}">
-                    <i class="fas fa-home"></i> Home
-                </a>
-                <a href="{{ route('facts.index') }}" class="px-3 py-2 {{ request()->routeIs('facts.index') ? 'active-link' : 'text-gray-700 hover:text-blue-800' }}">
-                    <i class="fas fa-rocket"></i> Tech Facts
-                </a>
-                <a href="{{ route('facts.stats') }}" class="px-3 py-2 {{ request()->routeIs('facts.stats') ? 'active-link' : 'text-gray-700 hover:text-blue-800' }}">
-                    <i class="fas fa-chart-line"></i> Statistics
-                </a>
+                @foreach($menu as $menuItem)
+                    @if($menuItem->active)
+                        <span class="px-3 py-2 active-link">
+                        <i class="fas fa-home"></i> {{ $menuItem->title }}
+                    </span>
+                    @else
+                        <a href="{{ $menuItem->url }}" class="px-3 py-2 text-gray-700 hover:text-blue-800">
+                            <i class="fas fa-home"></i> {{ $menuItem->title }}
+                        </a>
+                    @endif
+                @endforeach
             </div>
             <div class="md:hidden">
                 <button id="mobile-menu-button" class="text-gray-700">
@@ -52,15 +54,17 @@
         </div>
         <div id="mobile-menu" class="md:hidden hidden py-4 border-t">
             <div class="flex flex-col space-y-3">
-                <a href="{{ url('/') }}" class="px-3 py-2 {{ request()->is('/') ? 'active-link' : 'text-gray-700 hover:text-blue-800' }}">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
-                <a href="{{ route('facts.index') }}" class="px-3 py-2 {{ request()->routeIs('facts.index') ? 'active-link' : 'text-gray-700 hover:text-blue-800' }}">
-                    <i class="fas fa-list mr-2"></i>Tech Facts
-                </a>
-                <a href="{{ route('facts.stats') }}" class="px-3 py-2 {{ request()->routeIs('facts.stats') ? 'active-link' : 'text-gray-700 hover:text-blue-800' }}">
-                    <i class="fas fa-chart-bar mr-2"></i>Statistics
-                </a>
+                @foreach($menu as $menuItem)
+                    @if($menuItem->active)
+                        <span class="px-3 py-2 active-link">
+                            <i class="fas fa-home"></i> {{ $menuItem->title }}
+                        </span>
+                    @else
+                        <a href="{{ $menuItem->url }}" class="px-3 py-2 text-gray-700 hover:text-blue-800">
+                            <i class="fas fa-home"></i> {{ $menuItem->title }}
+                        </a>
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>
