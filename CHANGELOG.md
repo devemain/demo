@@ -1,3 +1,9 @@
+## [1.1.4](https://github.com/devemain/demo/compare/v1.1.3...v1.1.4) (2025-12-19)
+
+### ✨ Improvements
+
+* update deploy.sh script, add version service provider ([4919123](https://github.com/devemain/demo/commit/491912345a8ace14ef222ac6acc51c0af3248f23))
+
 ## [1.1.3](https://github.com/devemain/demo/compare/v1.1.2...v1.1.3) (2025-12-19)
 
 ### 🐛 Bug Fixes
