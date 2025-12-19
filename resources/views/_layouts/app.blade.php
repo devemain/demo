@@ -49,9 +49,7 @@
                         </a>
                     @endif
                 @endforeach
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 ml-3 w-fit">
-                    <i class="fab fa-git-alt"></i> v{{ config('app.version', '1.0.0') }}
-                </span>
+                <x-app-version-badge />
             </div>
             <div class="md:hidden">
                 <button id="mobile-menu-button" class="text-gray-700">
@@ -72,9 +70,7 @@
                         </a>
                     @endif
                 @endforeach
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 ml-3 w-fit">
-                    <i class="fab fa-git-alt"></i> v{{ config('app.version', '1.0.0') }}
-                </span>
+                <x-app-version-badge />
             </div>
         </div>
     </div>

@@ -39,6 +39,12 @@ setup_dependencies() {
                 npm install
                 print_success_frame "npm dependencies installed"
             fi
+
+            if [[ ! "$OPTION" =~ ^(-q|--quiet)$ ]] && ask_yes_no "Build assets?" "y"; then
+                print_loading_frame "Building assets with Vite"
+                npm run build
+                print_success_frame "Assets created"
+            fi
         else
             print_warning_frame "npm not found, skipping"
         fi

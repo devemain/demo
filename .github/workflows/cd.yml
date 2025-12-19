@@ -1,0 +1,46 @@
+# ============================================================================
+# 2025 DeveMain
+#
+# All rights reserved. For internal use only.
+# Unauthorized copying, modification, or distribution is prohibited.
+#
+# @author    DeveMain <devemain@gmail.com>
+# @copyright 2025 DeveMain
+# @license   PROPRIETARY
+# @link      https://github.com/DeveMain
+# ============================================================================
+
+name: CD
+
+on:
+  workflow_run:
+    workflows: [ CI ]
+    types: [ completed ]
+    branches: [ main ]
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show deployment info
+        run: |
+          echo "CI Run: ${{ github.event.workflow_run.run_number }}"
+          echo "CI Status: ${{ github.event.workflow_run.conclusion }}"
+          echo "Commit SHA: ${{ github.event.workflow_run.head_sha }}"
+          echo "Triggered by: ${{ github.event.workflow_run.actor.login }}"
+
+      - name: Trigger Deploy
+        env:
+          DEPLOY_HOOK: ${{ secrets.DEPLOY_HOOK }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "✘ ERROR: DEPLOY_HOOK secret is not set!"
+            echo "Please add DEPLOY_HOOK to GitHub Secrets"
+            exit 1
+          fi
+
+          echo "⟳ Submitting deployment request to hosting..."
+          curl -f -s -X POST "$DEPLOY_HOOK"
+          echo ""
+          echo "✔ Deployment started successfully!"

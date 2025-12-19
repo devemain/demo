@@ -60,4 +60,4 @@ jobs:
           GIT_COMMITTER_EMAIL: "devemain+release-bot@users.noreply.github.com"
 
       - name: Push changes
-        run: git push --follow-tags origin main
+        run: git push origin main --follow-tags
