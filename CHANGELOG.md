@@ -1,3 +1,9 @@
+## [1.1.3](https://github.com/devemain/demo/compare/v1.1.2...v1.1.3) (2025-12-19)
+
+### 🐛 Bug Fixes
+
+* resolve undefined $menu by registering provider ([e5ee04a](https://github.com/devemain/demo/commit/e5ee04adbe5e59f229aad1b7a4ca9eabc4744c9c))
+
 ## [1.1.2](https://github.com/devemain/demo/compare/v1.1.1...v1.1.2) (2025-12-19)
 
 ### ✨ Improvements
