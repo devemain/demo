@@ -29,22 +29,29 @@
     <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
             <div class="flex items-center">
-                <a href="{{ url('/') }}" class="no-transform">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo h-20">
-                </a>
+                @if(!request()->is('/'))
+                    <a href="{{ url('/') }}" class="no-transform">
+                @endif
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo h-20">
+                @if(!request()->is('/'))
+                    </a>
+                @endif
             </div>
             <div class="hidden md:flex items-center space-x-6">
                 @foreach($menu as $menuItem)
                     @if($menuItem->active)
                         <span class="px-3 py-2 active-link">
-                        <i class="fas fa-home"></i> {{ $menuItem->title }}
-                    </span>
+                            <i class="fas fa-home"></i> {{ $menuItem->title }}
+                        </span>
                     @else
                         <a href="{{ $menuItem->url }}" class="px-3 py-2 text-gray-700 hover:text-blue-800">
                             <i class="fas fa-home"></i> {{ $menuItem->title }}
                         </a>
                     @endif
                 @endforeach
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 ml-3 w-fit">
+                    <i class="fab fa-git-alt"></i> v{{ config('app.version', '1.0.0') }}
+                </span>
             </div>
             <div class="md:hidden">
                 <button id="mobile-menu-button" class="text-gray-700">
@@ -65,6 +72,9 @@
                         </a>
                     @endif
                 @endforeach
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 ml-3 w-fit">
+                    <i class="fab fa-git-alt"></i> v{{ config('app.version', '1.0.0') }}
+                </span>
             </div>
         </div>
     </div>

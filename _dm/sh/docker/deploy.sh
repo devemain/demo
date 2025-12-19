@@ -51,30 +51,43 @@ if [ "$APP_ENV" != "local" ] && [ -z "$APP_KEY" ]; then
 fi
 
 # Set permissions
-print_loading_frame "[prod] Setting permissions"
-if [ "$APP_ENV" != "local" ]; then
-    chown -R www-data:www-data .
-    chmod -R 775 storage
-    chmod -R 775 bootstrap/cache
+print_loading_frame "[docker] Setting permissions"
+if [ $(pwd) = "/var/www/html" ]; then
+    if [ "$APP_ENV" != "local" ]; then
+        chown -R www-data:www-data . 2>/dev/null || true
+    else
+        chown -R "$USER":www-data . 2>/dev/null || true
+    fi
+
+    chmod -R 775 storage 2>/dev/null || true
+    chmod -R 775 bootstrap/cache 2>/dev/null || true
 fi
 
 # Check database connection and run migrations
-print_loading_frame "[prod] Testing database connection"
-if [ "$APP_ENV" != "local" ]; then
+print_loading_frame "[docker] Testing database connection"
+if [ $(pwd) = "/var/www/html" ]; then
+    chmod 775 database 2>/dev/null || true
+
     # Create SQLite database file
     if [ ! -f "database/database.sqlite" ]; then
         touch database/database.sqlite
         print_success_frame "Created SQLite database file"
     fi
-    chown www-data:www-data database/database.sqlite
-    chmod 666 database/database.sqlite
 
-    if php artisan tinker --execute="echo 'DB connected';" 2>/dev/null || true; then
-        print_loading_frame "Database connection successful, running migrations"
-        php artisan migrate --force
+    if [ "$APP_ENV" != "local" ]; then
+        chown www-data:www-data database/database.sqlite 2>/dev/null || true
+        chmod 666 database/database.sqlite 2>/dev/null || true
+
+        if php artisan tinker --execute="echo 'DB connected';" 2>/dev/null || true; then
+            print_loading_frame "Database connection successful, running migrations"
+            php artisan migrate --force
+        else
+            print_warning_frame "WARNING: Cannot connect to database, skipping migrations"
+            print_warning_frame "Check your DB_HOST, DB_USERNAME, DB_PASSWORD in .env file"
+        fi
     else
-        print_warning_frame "WARNING: Cannot connect to database, skipping migrations"
-        print_warning_frame "Check your DB_HOST, DB_USERNAME, DB_PASSWORD in .env file"
+        chown "$USER":www-data database/database.sqlite 2>/dev/null || true
+        chmod 666 database/database.sqlite 2>/dev/null || true
     fi
 fi
 
@@ -82,8 +95,8 @@ fi
 # php artisan queue:restart
 
 # Clear cache
-print_loading_frame "[prod] Caching configuration"
-if [ "$APP_ENV" != "local" ]; then
+print_loading_frame "[docker] Caching configuration"
+if [ $(pwd) = "/var/www/html" ]; then
     php artisan optimize:clear
 fi
 
