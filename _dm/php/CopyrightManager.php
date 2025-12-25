@@ -16,16 +16,45 @@ namespace Devemain;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
+/**
+ * Managing copyright notices in project files.
+ * Handles adding, updating, and removing copyright headers from various file types.
+ */
 class CopyrightManager
 {
+    /**
+     * Current year for copyright notices.
+     */
     private string $year;
+
+    /**
+     * Template for copyright notices.
+     */
     private string $copyrightTemplate;
+
+    /**
+     * Directories to process for copyright notices.
+     */
     private array $directories;
+
+    /**
+     * File extensions to process for copyright notices.
+     */
     private array $extensions;
+
+    /**
+     * Root files to process for copyright notices.
+     */
     private array $rootFiles;
 
-    public function __construct(private CliHelper $cli)
-    {
+    /**
+     * Creates a new instance.
+     *
+     * @param CliHelper $cli CLI helper for command line operations
+     */
+    public function __construct(
+        private readonly CliHelper $cli
+    ) {
         $this->year = date('Y');
         $this->copyrightTemplate = $this->getCopyrightTemplate();
         $this->directories = ['_dm', 'app', 'database', 'resources', 'routes', '.github'];
@@ -33,6 +62,9 @@ class CopyrightManager
         $this->rootFiles = ['dm.sh', 'docker.sh', 'docker-compose.yml', 'Dockerfile'];
     }
 
+    /**
+     * Main execution method for copyright operations. Handles adding, updating, and removing copyright headers.
+     */
     public function run(): void
     {
         $removeMode = $this->cli->hasOption('remove');
@@ -64,6 +96,12 @@ class CopyrightManager
         $this->cli->success($removeMode ? 'Copyright removed!' : 'All copyrights have been updated!', true);
     }
 
+    /**
+     * Process all files in a directory for copyright operations.
+     * 
+     * @param string $dir Directory path to process
+     * @return array Array containing [processedCount, skippedCount]
+     */
     private function processDirectory(string $dir): array
     {
         $processed = 0;
@@ -104,6 +142,11 @@ class CopyrightManager
         return [$processed, $skipped];
     }
 
+    /**
+     * Process root files for copyright operations.
+     * 
+     * @return array Array containing [processedCount, skippedCount]
+     */
     private function processRootFiles(): array
     {
         $processed = 0;
@@ -133,6 +176,17 @@ class CopyrightManager
         return [$processed, $skipped];
     }
 
+    /**
+     * Process a single file for copyright operations.
+     * 
+     * @param string $path File path
+     * @param string $filename File name
+     * @param string $content File content
+     * @param string $extension File extension
+     * @param bool $isBlade Whether the file is a Blade template
+     * @param int &$processed Reference to processed files counter
+     * @param int &$skipped Reference to skipped files counter
+     */
     private function processFile(string $path, string $filename, string $content, string $extension,
                                  bool $isBlade, int &$processed, int &$skipped): void
     {
@@ -153,6 +207,15 @@ class CopyrightManager
         }
     }
 
+    /**
+     * Update a file with copyright header.
+     * 
+     * @param string $path File path
+     * @param string $content Current file content
+     * @param string $extension File extension
+     * @param bool $isBlade Whether the file is a Blade template
+     * @return bool True if file was successfully updated, false otherwise
+     */
     private function updateFile(string $path, string $content, string $extension, bool $isBlade): bool
     {
         $header = $this->getCopyrightHeader($path, $isBlade);
@@ -166,6 +229,11 @@ class CopyrightManager
         return file_put_contents($path, $newContent) !== false;
     }
 
+    /**
+     * Get the copyright notice template.
+     * 
+     * @return string Copyright notice template with current year
+     */
     private function getCopyrightTemplate(): string
     {
         return <<<COPYRIGHT
@@ -183,11 +251,24 @@ class CopyrightManager
             COPYRIGHT;
     }
 
+    /**
+     * Check if content contains a DeveMain copyright notice.
+     *
+     * @param string $content File content to check
+     * @return bool True if DeveMain copyright is found, false otherwise
+     */
     private function hasDeveMainCopyright(string $content): bool
     {
         return preg_match('/\d{4} DeveMain/', $content) === 1;
     }
 
+    /**
+     * Generate a copyright header formatted for a specific file type.
+     * 
+     * @param string $path File path
+     * @param bool $isBlade Whether the file is a Blade template
+     * @return string Formatted copyright header for the file type
+     */
     private function getCopyrightHeader(string $path, bool $isBlade): string
     {
         // Extracting plain text without /** and */
@@ -270,6 +351,14 @@ class CopyrightManager
         }
     }
 
+    /**
+     * Remove copyright notice from file content.
+     * 
+     * @param string $content File content
+     * @param string $path File path
+     * @param bool $isBlade Whether the file is a Blade template
+     * @return string Content with copyright removed
+     */
     private function removeCopyright(string $content, string $path, bool $isBlade): string
     {
         $filename = basename($path);
@@ -322,12 +411,30 @@ class CopyrightManager
         }
     }
 
+    /**
+     * Replace existing copyright notice with a new one.
+     * 
+     * @param string $content Current file content
+     * @param string $header New copyright header
+     * @param string $path File path
+     * @param string $extension File extension
+     * @param bool $isBlade Whether the file is a Blade template
+     * @return string Content with updated copyright
+     */
     private function replaceCopyright(string $content, string $header, string $path, string $extension, bool $isBlade): string
     {
         $contentWithoutCopyright = $this->removeCopyright($content, $path, $isBlade);
         return $this->addHeaderToContent($contentWithoutCopyright, $header, $extension);
     }
 
+    /**
+     * Add copyright header to the beginning of file content.
+     * 
+     * @param string $content Original file content
+     * @param string $header Copyright header to add
+     * @param string $extension File extension
+     * @return string Content with copyright header added
+     */
     private function addHeaderToContent(string $content, string $header, string $extension): string
     {
         $content = ltrim($content, "\n\r");

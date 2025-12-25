@@ -17,14 +17,25 @@ use App\Models\Fact;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
+/**
+ * Provides methods to generate, retrieve, and manage facts.
+ */
 class FactService
 {
+    /**
+     * Creates a new instance.
+     *
+     * @param GroqService $groqService Service for AI-powered fact generation
+     */
     public function __construct(
-        protected GroqService $groqService
+        protected readonly GroqService $groqService
     ) {}
 
     /**
-     * Generate facts using AI or fallback
+     * Generate facts using AI or fallback to pre-defined facts.
+     *
+     * @param int $count Number of facts to generate (default: 10)
+     * @return array Array of generated facts
      */
     public function generateFacts(int $count = 10): array
     {
@@ -40,7 +51,10 @@ class FactService
     }
 
     /**
-     * Save facts to database with upsert
+     * Save facts to database with upsert operation.
+     *
+     * @param array $facts Array of facts to save
+     * @return array Array of saved facts
      */
     protected function saveFacts(array $facts): array
     {
@@ -63,7 +77,10 @@ class FactService
     }
 
     /**
-     * Get fallback facts
+     * Get fallback facts based on language.
+     *
+     * @param string $language Language code for facts (default: 'en')
+     * @return array Array of fallback facts
      */
     protected function getFallbackFacts(string $language = 'en'): array
     {
@@ -118,7 +135,7 @@ class FactService
     }
 
     /**
-     * Create fallback facts when AI is unavailable
+     * Create fallback facts when AI is unavailable.
      */
     protected function createFallbackFacts(int $count = 10): array
     {
@@ -131,7 +148,7 @@ class FactService
     }
 
     /**
-     * Get the least shown fact (fair rotation)
+     * Get the least shown fact (fair rotation).
      */
     public function getFreshFact(): ?Fact
     {
@@ -148,7 +165,7 @@ class FactService
     }
 
     /**
-     * Mark fact as shown and increment views
+     * Mark fact as shown and increment views.
      */
     public function markAsShown(Fact $fact): bool
     {
@@ -159,7 +176,7 @@ class FactService
     }
 
     /**
-     * Get a truly random fact
+     * Get a truly random fact.
      */
     public function getRandomFact(): ?Fact
     {
@@ -169,7 +186,7 @@ class FactService
     }
 
     /**
-     * Get multiple random facts
+     * Get multiple random facts.
      */
     public function getRandomFacts(int $limit = 5): Collection
     {

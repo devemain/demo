@@ -13,21 +13,53 @@
 
 namespace Devemain;
 
+/**
+ * Handles the deployment and removal of configuration files.
+ * It can recursively process directories and files, providing detailed
+ * feedback on the operations performed.
+ */
 class ConfigDeployer
 {
+    /**
+     * Directory containing source configuration files.
+     */
     private string $sourceDir;
+
+    /**
+     * Processed files during deployment.
+     */
     private array $processed;
+
+    /**
+     * Store any errors encountered.
+     */
     private array $errors;
+
+    /**
+     * Removed files during removal operation.
+     */
     private array $removed;
 
-    public function __construct(private CliHelper $cli)
-    {
+    /**
+     * Creates a new instance.
+     *
+     * @param CliHelper $cli CLI helper instance for output operations
+     */
+    public function __construct(
+        private readonly CliHelper $cli
+    ) {
         $this->sourceDir = '_dm/config';
         $this->processed = [];
         $this->removed = [];
         $this->errors = [];
     }
 
+    /**
+     * Main execution method.
+     *
+     * Determines whether to run in deployment or removal mode based on
+     * command line options and executes the appropriate operations.
+     */
     public function run(): void
     {
         $removeMode = $this->cli->hasOption('remove');
@@ -45,6 +77,15 @@ class ConfigDeployer
         $this->cli->success('Configuration files ' . ($removeMode ? 'removed' : 'deployed') . ' successfully!', true);
     }
 
+    /**
+     * Process deployment of configuration files.
+     *
+     * Recursively processes a directory and its contents, deploying files
+     * to their target locations.
+     *
+     * @param string $dir Directory to process
+     * @param string $basePath Base path for relative path calculation
+     */
     private function processDeployment(string $dir, string $basePath = ''): void
     {
         if (!is_dir($dir)) {
@@ -70,6 +111,15 @@ class ConfigDeployer
         }
     }
 
+    /**
+     * Process removal of configuration files.
+     *
+     * Recursively processes a directory and its contents, removing files
+     * that match the source files.
+     *
+     * @param string $dir Directory to process
+     * @param string $basePath Base path for relative path calculation
+     */
     private function processRemoval(string $dir, string $basePath = ''): void
     {
         if (!is_dir($dir)) {
@@ -95,6 +145,15 @@ class ConfigDeployer
         }
     }
 
+    /**
+     * Deploy a single file.
+     *
+     * Creates target directories if needed and copies the source file
+     * to the target location.
+     *
+     * @param string $source Source file path
+     * @param string $relativePath Relative path for the target file
+     */
     private function deployFile(string $source, string $relativePath): void
     {
         $target = './' . $relativePath;
@@ -130,6 +189,15 @@ class ConfigDeployer
         }
     }
 
+    /**
+     * Remove a single file.
+     *
+     * Checks if the file can be safely removed and removes it if possible.
+     * Also removes empty parent directories after file removal.
+     *
+     * @param string $source Source file path
+     * @param string $relativePath Relative path for the target file
+     */
     private function removeFile(string $source, string $relativePath): void
     {
         $target = './' . $relativePath;
@@ -156,6 +224,16 @@ class ConfigDeployer
         }
     }
 
+    /**
+     * Check if a target file matches the source file.
+     *
+     * Compares the contents of the source and target files to determine
+     * if they are identical.
+     *
+     * @param string $source Source file path
+     * @param string $target Target file path
+     * @return bool True if files match, false otherwise
+     */
     private function isFileFromSource(string $source, string $target): bool
     {
         if (!file_exists($source) || !file_exists($target)) {
@@ -165,6 +243,13 @@ class ConfigDeployer
         return file_get_contents($source) === file_get_contents($target);
     }
 
+    /**
+     * Remove empty directories.
+     *
+     * Recursively removes empty directories starting from the given directory.
+     *
+     * @param string $dir Directory to check and potentially remove
+     */
     private function removeEmptyDirectories(string $dir): void
     {
         // Remove directory if it's empty and not the root
@@ -179,6 +264,12 @@ class ConfigDeployer
         }
     }
 
+    /**
+     * Display operation summary.
+     *
+     * Shows the results of the deployment or removal operation,
+     * including the number of processed files and any errors.
+     */
     private function showSummary(): void
     {
         $removeMode = $this->cli->hasOption('remove');

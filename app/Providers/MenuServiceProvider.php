@@ -17,6 +17,10 @@ use App\Data\View\MenuItem;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Provider is responsible for registering and booting
+ * the menu-related services for the application.
+ */
 class MenuServiceProvider extends ServiceProvider
 {
     /**
@@ -35,8 +39,16 @@ class MenuServiceProvider extends ServiceProvider
         $this->buildMainMenu();
     }
 
+    /**
+     * Build the main navigation menu.
+     *
+     * This method creates an array of menu items with their respective
+     * URIs, titles, icons, and active states. It then shares this menu
+     * with the '_layouts.app' view.
+     */
     protected function buildMainMenu(): void
     {
+        // Define the menu items array
         $menu = [
             MenuItem::make(
                 uri: '/',

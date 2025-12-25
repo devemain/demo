@@ -13,19 +13,45 @@
 
 namespace Devemain;
 
+/**
+ * Responsible for generating and managing LICENSE.md files
+ * for the project. It creates a proprietary license template with current year
+ * and handles the file creation process.
+ */
 class LicenseManager
 {
+    /**
+     * Stores the current year for the license.
+     */
     private string $year;
+
+    /**
+     * Holds the license template content.
+     */
     private string $licenseTemplate;
+
+    /**
+     * File path where the LICENSE.md will be stored.
+     */
     private string $path;
 
-    public function __construct(private CliHelper $cli)
-    {
+    /**
+     * Creates a new instance.
+     *
+     * @param CliHelper $cli CLI helper instance for console output
+     */
+    public function __construct(
+        private readonly CliHelper $cli
+    ) {
         $this->year = date('Y');
         $this->licenseTemplate = $this->getLicenseTemplate();
         $this->path = '_dm/config/LICENSE.md';
     }
 
+    /**
+     * Main execution method that generates the LICENSE.md file.
+     * Creates directory if needed and outputs success/error messages.
+     */
     public function run(): void
     {
         $this->cli->frame('Generating LICENSE.md file');
@@ -44,6 +70,11 @@ class LicenseManager
         }
     }
 
+    /**
+     * Generates a proprietary license template with the current year.
+     *
+     * @return string The complete license template as a string
+     */
     private function getLicenseTemplate(): string
     {
         return <<<LICENSE
