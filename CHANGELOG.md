@@ -1,3 +1,14 @@
+## [1.1.6](https://github.com/devemain/demo/compare/v1.1.5...v1.1.6) (2025-12-25)
+
+### ✨ Improvements
+
+* rename ErrorHandler to ErrorHandlerTrait, add code documentation ([50076f9](https://github.com/devemain/demo/commit/50076f9f311f81232b09fcb89746237456922cb4))
+* replace php 8.2 to 8.4 in composer.json, improve Facts controller ([e3e937c](https://github.com/devemain/demo/commit/e3e937cad9acd770e5bbc06bfcfae8ae0ab43ce6))
+
+### 📚 Documentation
+
+* improve code documentation ([7c70e99](https://github.com/devemain/demo/commit/7c70e9958ecbadad2e539c54ad0cafcf42fe5d68))
+
 ## [1.1.5](https://github.com/devemain/demo/compare/v1.1.4...v1.1.5) (2025-12-19)
 
 ### ✨ Improvements
