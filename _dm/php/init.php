@@ -32,9 +32,9 @@ $cli = new CliHelper;
 $cli->execute($argv);
 
 try {
-    (new LicenseManager($cli))->run();
-    (new CopyrightManager($cli))->run();
-    (new ConfigDeployer($cli))->run();
+    new LicenseManager($cli)->run();
+    new CopyrightManager($cli)->run();
+    new ConfigDeployer($cli)->run();
     $cli::frameBottom('green');
 } catch (Exception $e) {
     $cli::error('Error: ' . $e->getMessage());
