@@ -58,7 +58,7 @@ class CopyrightManager
         $this->year = date('Y');
         $this->copyrightTemplate = $this->getCopyrightTemplate();
         $this->directories = ['_dm', 'app', 'database', 'resources', 'routes', '.github'];
-        $this->extensions = ['php', 'js', 'css', 'scss', 'sh', 'yml', 'yaml'];
+        $this->extensions = ['php', 'js', 'css', 'scss', 'sh', 'yml', 'yaml', 'vue'];
         $this->rootFiles = ['dm.sh', 'docker.sh', 'docker-compose.yml', 'Dockerfile'];
     }
 
@@ -98,7 +98,7 @@ class CopyrightManager
 
     /**
      * Process all files in a directory for copyright operations.
-     * 
+     *
      * @param string $dir Directory path to process
      * @return array Array containing [processedCount, skippedCount]
      */
@@ -144,7 +144,7 @@ class CopyrightManager
 
     /**
      * Process root files for copyright operations.
-     * 
+     *
      * @return array Array containing [processedCount, skippedCount]
      */
     private function processRootFiles(): array
@@ -178,7 +178,7 @@ class CopyrightManager
 
     /**
      * Process a single file for copyright operations.
-     * 
+     *
      * @param string $path File path
      * @param string $filename File name
      * @param string $content File content
@@ -209,7 +209,7 @@ class CopyrightManager
 
     /**
      * Update a file with copyright header.
-     * 
+     *
      * @param string $path File path
      * @param string $content Current file content
      * @param string $extension File extension
@@ -231,7 +231,7 @@ class CopyrightManager
 
     /**
      * Get the copyright notice template.
-     * 
+     *
      * @return string Copyright notice template with current year
      */
     private function getCopyrightTemplate(): string
@@ -264,7 +264,7 @@ class CopyrightManager
 
     /**
      * Generate a copyright header formatted for a specific file type.
-     * 
+     *
      * @param string $path File path
      * @param bool $isBlade Whether the file is a Blade template
      * @return string Formatted copyright header for the file type
@@ -339,7 +339,8 @@ class CopyrightManager
                 return '';
 
             case 'md':
-                return '<!--' . PHP_EOL . implode(PHP_EOL, $cleanLines) . PHP_EOL . '-->' . PHP_EOL;
+            case 'vue':
+                return '<!--' . PHP_EOL . implode(PHP_EOL, $cleanLines) . PHP_EOL . '-->' . CliHelper::PHP_EOL2;
 
             case 'js':
             default:
@@ -353,7 +354,7 @@ class CopyrightManager
 
     /**
      * Remove copyright notice from file content.
-     * 
+     *
      * @param string $content File content
      * @param string $path File path
      * @param bool $isBlade Whether the file is a Blade template
@@ -375,7 +376,6 @@ class CopyrightManager
             $pattern = '/# ============================================================================[\s\S]*?# ============================================================================\s*\n*/';
             return preg_replace($pattern, '', $content, 1);
         }
-
 
         switch ($extension) {
             case 'php':
@@ -403,6 +403,7 @@ class CopyrightManager
                 return $content;
 
             case 'md':
+            case 'vue':
                 $pattern = '/<!--[\s\S]*?-->\s*\n*/s';
                 return preg_replace($pattern, '', $content, 1);
 
@@ -413,7 +414,7 @@ class CopyrightManager
 
     /**
      * Replace existing copyright notice with a new one.
-     * 
+     *
      * @param string $content Current file content
      * @param string $header New copyright header
      * @param string $path File path
@@ -429,7 +430,7 @@ class CopyrightManager
 
     /**
      * Add copyright header to the beginning of file content.
-     * 
+     *
      * @param string $content Original file content
      * @param string $header Copyright header to add
      * @param string $extension File extension
@@ -473,6 +474,15 @@ class CopyrightManager
                         $rest = ltrim($rest, "\n\r\t ");
                         return $firstLine . $header . $rest;
                     }
+                }
+                break;
+
+            case 'vue':
+                $trimmedContent = ltrim($content);
+                if (str_starts_with($trimmedContent, '<template>') ||
+                    str_starts_with($trimmedContent, '<script>') ||
+                    str_starts_with($trimmedContent, '<style>')) {
+                    return $header . $content;
                 }
                 break;
         }
