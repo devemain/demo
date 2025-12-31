@@ -1,3 +1,13 @@
+## [1.2.0](https://github.com/devemain/demo/compare/v1.1.6...v1.2.0) (2025-12-31)
+
+### 🚀 Features
+
+* add Vue.js to the project ([9c359f3](https://github.com/devemain/demo/commit/9c359f38e5c06d639cc824d1d72d971922572492))
+
+### ✨ Improvements
+
+* add support for .vue files to CopyrightManager ([cfe6be6](https://github.com/devemain/demo/commit/cfe6be637c352ddea60766620e4682fc23ed8b4c))
+
 ## [1.1.6](https://github.com/devemain/demo/compare/v1.1.5...v1.1.6) (2025-12-25)
 
 ### ✨ Improvements
