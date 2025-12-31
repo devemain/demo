@@ -17,36 +17,7 @@
         Demo Project by DeveMain
     </h1>
 
-    <div id="fact-container" class="max-w-4xl mx-auto my-8">
-        <div class="bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                <span class="blink">AI:</span> Did You Know <span class="blink">?</span>
-            </h2>
-
-            <div id="fact-content" class="min-h-36">
-                <p class="fact placeholder-fact">
-                    Click the button to get an interesting fact!
-                </p>
-            </div>
-
-            <div class="flex gap-3 justify-center mt-6 flex-wrap">
-                <button id="get-fact" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-rotate"></i>
-                    Get New Fact
-                </button>
-                <button id="copy-fact" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    <i class="fas fa-copy"></i>
-                    Copy Fact
-                </button>
-            </div>
-
-            <div class="mt-6 pt-4 border-t border-gray-200 text-sm text-gray-500 text-center">
-                <span id="views-count">0</span> views •
-                ID: <span id="fact-id">-</span> •
-                Updated: <span id="last-updated">-</span>
-            </div>
-        </div>
-    </div>
+    <div data-vue-component="FactFetcher" class="max-w-4xl mx-auto my-8"></div>
 
     <div class="mt-12">
         <h2 class="text-2xl font-bold text-gray-800 mb-8">Features</h2>
@@ -122,6 +93,10 @@
             <span class="px-4 py-2 bg-red-50 text-red-800 rounded-full font-medium text-sm">
                 <i class="fab fa-npm"></i>
                 npm
+            </span>
+            <span class="px-4 py-2 bg-teal-50 text-teal-800 rounded-full font-medium text-sm">
+                <i class="fab fa-vuejs"></i>
+                Vue.js
             </span>
             <span class="px-4 py-2 bg-cyan-50 text-cyan-800 rounded-full font-medium text-sm">
                 <i class="fab fa-css"></i>

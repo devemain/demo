@@ -2,8 +2,10 @@
 
 ![PHP Version](https://img.shields.io/badge/PHP-8.4%2B-blue)
 ![Laravel Version](https://img.shields.io/badge/Laravel-12.x-red)
-![License](https://img.shields.io/badge/License-PROPRIETARY-orange)
+![Vue.js Version](https://img.shields.io/badge/Vue.js-3.x-brightgreen)
 ![AI API](https://img.shields.io/badge/AI--API-Groq-green)
+![CI/CD](https://img.shields.io/badge/CI/CD-GitHub_Actions-blue)
+![License](https://img.shields.io/badge/License-PROPRIETARY-orange)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
 A professional Laravel project template showcasing modern development practices, Docker setup, and automation tools. Perfect for starting new projects with best practices already configured.
@@ -26,14 +28,17 @@ A professional Laravel project template showcasing modern development practices,
 
 *Features and functionality are subject to change and expansion.*
 
-
 ## Features
 
 ### Development Foundation:
 - **Custom Development Tools** - CLI utilities for common tasks
 - **Dockerized Environment** - Pre-configured with essential services
+- **CI/CD Pipeline** - Automated building and deployment with GitHub Actions
 - **Automated Workflows** - Git hooks and deployment scripts
+- **Semantic Commits** - Enforced commit message conventions for clean history
+- **Automated Tagging** - Configured bot for automatic version tagging
 - **Modern PHP Practices** - Clean code architecture and following Laravel conventions
+- **Vue.js Integration** - Progressive JavaScript framework for reactive interfaces
 
 ### AI-Powered Content:
 - **AI Fact Generation** - Powered by Groq AI API for intelligent content
@@ -46,6 +51,11 @@ A professional Laravel project template showcasing modern development practices,
 - **Statistics Dashboard** - Detailed analytics and insights
 - **Search** - Quick fact discovery
 
+### Vue.js Features:
+- **Single File Components** - Clean separation of template, script, and styles
+- **Reactive Data Binding** - Automatic UI updates when data changes
+- **Component-Based Architecture** - Reusable and maintainable UI components
+
 ## Technology Stack
 
 ### Core:
@@ -55,9 +65,9 @@ A professional Laravel project template showcasing modern development practices,
 - **Composer** - PHP dependency management
 
 ### Frontend & UI:
+- **Vue.js 3.x** - Progressive JavaScript framework for building user interfaces
 - **Tailwind CSS** - Utility-first CSS framework
 - **Font Awesome** - Professional icon toolkit
-- **Modern JavaScript** - Latest JavaScript standard
 - **Vite** - Next-generation frontend tooling
 - **npm** - JavaScript package management
 

@@ -12,6 +12,8 @@
 
 import './bootstrap';
 
-/* Custom */
+/* Common */
 import './_common';
-import './pages/home';
+
+/* Vue */
+import '../vue/_autoload'

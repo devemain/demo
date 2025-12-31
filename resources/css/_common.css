@@ -50,3 +50,11 @@ button:not(.no-transform):hover, a:not(.no-transform):hover, .fact-card:hover {
     transform: translateY(-2px);
     transition: transform 0.2s;
 }
+[data-vue-component] {
+    opacity: 0;
+    animation: vueFadeIn 0.3s forwards;
+    animation-delay: 0.1s;
+}
+@keyframes vueFadeIn {
+    to { opacity: 1; }
+}

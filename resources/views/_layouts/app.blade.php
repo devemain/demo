@@ -83,7 +83,7 @@
 <footer class="bg-white border-t py-6">
     <div class="max-w-7xl mx-auto px-4 text-center text-gray-600">
         <p class="text-sm md:text-base">
-            Sergey Alekseev | PHP Web Developer | <a href="mailto:devemain@gmail.com">devemain@gmail.com</a>
+            Sergey Alekseev | Full-Stack PHP Developer | <a href="mailto:devemain@gmail.com">devemain@gmail.com</a>
         </p>
     </div>
 </footer>
