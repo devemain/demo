@@ -1,6 +1,6 @@
 # PROPRIETARY LICENSE
 
-Copyright (c) 2025 DeveMain. All rights reserved.
+Copyright (c) 2026 DeveMain. All rights reserved.
 
 This software and associated documentation files (the "Software") are
 the proprietary property of DeveMain. The Software is protected by
