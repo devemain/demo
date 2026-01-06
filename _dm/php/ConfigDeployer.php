@@ -175,8 +175,11 @@ class ConfigDeployer
         }
 
         // Check if target file exists
-        if (file_exists($target)) {
+        if (file_exists($target) && $this->isFileFromSource($source, $target)) {
             $this->errors[] = 'Target file already exists: ' . $target;
+            return;
+        } elseif (!$this->cli->hasOption('force') || $relativePath === 'package.json') {
+            $this->cli->warning('File was modified, skipping: ' . $target, true);
             return;
         }
 

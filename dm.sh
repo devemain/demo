@@ -46,7 +46,7 @@ main() {
     # 4. Run PHP initialization script
     if [[ ! "$OPTION" =~ ^(-q|--quiet)$ ]] && ask_yes_no "Run PHP initialization script?" "y"; then
         print_loading_frame "Running initialization"
-        run_php_script "_dm/php/init.php" ""
+        run_php_script "_dm/php/init.php" "$@"
 
         print_success_frame "Initialization completed"
         print_frame_bottom "${GREEN}"
