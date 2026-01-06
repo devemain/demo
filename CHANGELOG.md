@@ -1,3 +1,15 @@
+## [1.2.1](https://github.com/devemain/demo/compare/v1.2.0...v1.2.1) (2026-01-06)
+
+### ✨ Improvements
+
+* add force option for ConfigDeployer ([0bebcd4](https://github.com/devemain/demo/commit/0bebcd4d35dd20ff84b92e244c7e88dfceb447e3))
+* add skip argument to CI/CD ([31f2b9b](https://github.com/devemain/demo/commit/31f2b9bbace01a144df2961dfa1a47118f5502f4))
+
+### 📚 Documentation
+
+* update year ([377672a](https://github.com/devemain/demo/commit/377672a4c9385108691bfdccbf724de1cd413d73))
+* update year ([6aabfd9](https://github.com/devemain/demo/commit/6aabfd90843b75698bc2439f7d0f46e643d7c3ed))
+
 ## [1.2.0](https://github.com/devemain/demo/compare/v1.1.6...v1.2.0) (2025-12-31)
 
 ### 🚀 Features
