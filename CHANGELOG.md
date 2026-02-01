@@ -1,3 +1,9 @@
+## [1.2.2](https://github.com/devemain/demo/compare/v1.2.1...v1.2.2) (2026-02-01)
+
+### 🔧 Refactoring
+
+* apply SOLID principles to project architecture ([76ab518](https://github.com/devemain/demo/commit/76ab518aeab3ae0e5e1e729d7a3e54ed58b63a3c))
+
 ## [1.2.1](https://github.com/devemain/demo/compare/v1.2.0...v1.2.1) (2026-01-06)
 
 ### ✨ Improvements
