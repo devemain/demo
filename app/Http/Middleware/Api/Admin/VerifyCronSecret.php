@@ -13,7 +13,7 @@
 
 namespace App\Http\Middleware\Api\Admin;
 
-use App\Services\LoggerService;
+use App\Services\Logging\Contracts\LoggerInterface;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,6 +26,15 @@ use Illuminate\Http\Request;
 class VerifyCronSecret
 {
     /**
+     * Creates a new instance.
+     *
+     * @param LoggerInterface $logger Service for logging activities
+     */
+    public function __construct(
+        protected readonly LoggerInterface $logger
+    ) {}
+
+    /**
      * Handle an incoming request.
      *
      * @param Request $request The incoming HTTP request instance
@@ -34,8 +43,8 @@ class VerifyCronSecret
      */
     public function handle(Request $request, Closure $next): JsonResponse
     {
-        // Initialize logger with current method name for tracking
-        $logger = new LoggerService(__METHOD__);
+        // Set the current method as the caller for logging purposes
+        $this->logger->setCaller(__METHOD__);
 
         // Retrieve the secret from the request header and convert to string
         $secret = (string) $request->header('X-Cron-Secret');
@@ -46,7 +55,7 @@ class VerifyCronSecret
         // Check if the secret is missing or doesn't match the configured secret
         if (!$secret || !hash_equals($configSecret, $secret)) {
             // Log the unauthorized attempt with relevant details
-            $logger->warning('Unauthorized request from IP ' . $request->ip(), [
+            $this->logger->warning('Unauthorized request from IP ' . $request->ip(), [
                 'has_secret' => !empty($secret),
                 'secret_match' => hash_equals($configSecret, $secret),
             ]);

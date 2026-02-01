@@ -11,9 +11,9 @@
  * @link      https://github.com/DeveMain
  */
 
-namespace App\Traits\Api;
+namespace App\Services\Api;
 
-use App\Services\LoggerService;
+use App\Services\Logging\Contracts\LoggerInterface;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
@@ -21,22 +21,26 @@ use Throwable;
  * Provides a standardized method to handle API errors across the application.
  * It includes error logging and formatted error responses.
  */
-trait ErrorHandlerTrait
+class ApiErrorHandlerService
 {
+    /**
+     * Default HTTP status code for errors.
+     */
+    protected int $defaultStatusCode = 500;
+
     /**
      * Handle API errors and return a formatted JSON response.
      *
      * @param Throwable $e The caught exception or error
+     * @param LoggerInterface $logger Service for logging errors with current state
      * @param string $context Optional context information about where the error occurred
+     * @param int|null $statusCode Optional HTTP status code (uses default if not provided)
      * @return JsonResponse A JSON response containing error details
      */
-    protected function handleApiError(Throwable $e, string $context = ''): JsonResponse
+    public function handleError(Throwable $e, LoggerInterface $logger, string $context = '', ?int $statusCode = null): JsonResponse
     {
         // Create error message with optional context
         $message = ($context ? $context . ': ' : '') . $e->getMessage();
-
-        // Get logger instance (use property if exists, otherwise create new)
-        $logger = property_exists($this, 'logger') ? $this->logger : new LoggerService(__METHOD__);
 
         // Log error details
         $logger->error($message, $this->getErrorDetails($e));
@@ -44,7 +48,7 @@ trait ErrorHandlerTrait
         // Prepare base response array
         $response = [
             'success' => false,
-            'message' => config('app.debug') ? $e->getMessage() : 'Internal server error',
+            'message' => config('app.debug') ? $e->getMessage() : 'An error occurred',
         ];
 
         // Add detailed error information if debug mode is enabled
@@ -52,8 +56,11 @@ trait ErrorHandlerTrait
             $response['error'] = $this->getErrorDetails($e);
         }
 
-        // Return JSON response with 500 status code
-        return response()->json($response, 500);
+        // Determine the status code
+        $statusCode = $statusCode ?? $this->defaultStatusCode;
+
+        // Return JSON response with status code
+        return response()->json($response, $statusCode);
     }
 
     /**

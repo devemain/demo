@@ -13,7 +13,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fact;
+use App\Repositories\Contracts\FactRepositoryInterface;
+use App\Services\Fact\FactService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -40,6 +41,17 @@ class FactsController extends Controller
     protected array $perPageOptions = [10, 20, 50, 100];
 
     /**
+     * Creates a new instance.
+     *
+     * @param FactService $factService Service for fact generation and business logic
+     * @param FactRepositoryInterface $factRepository Repository for fact data operations
+     */
+    public function __construct(
+        protected readonly FactService $factService,
+        protected readonly FactRepositoryInterface $factRepository
+    ) {}
+
+    /**
      * Display a paginated list of all facts.
      *
      * @param Request $request The incoming HTTP request containing pagination parameters
@@ -57,12 +69,10 @@ class FactsController extends Controller
         $currentPage = $request->integer('page', 1);
 
         // Retrieve paginated facts, ordered by latest ID
-        $facts = Fact::query()
-            ->latest('id')
-            ->paginate($perPage, ['*'], 'page', $currentPage);
+        $facts = $this->factRepository->getPaginated($perPage, $currentPage);
 
         // Get total count of all facts for display purposes
-        $totalFacts = Fact::query()->count();
+        $totalFacts = $this->factRepository->count();
 
         // Return the view with facts, total count, and current per page setting
         return view('facts.index', compact('facts', 'totalFacts', 'perPage'))
@@ -77,24 +87,19 @@ class FactsController extends Controller
     public function stats(): View
     {
         // Get total count of all facts
-        $total = Fact::query()->count();
+        $total = $this->factRepository->count();
 
         // Get count of facts created today
-        $today = Fact::query()->whereDate('created_at', Carbon::today())->count();
+        $today = $this->factRepository->countByDate(Carbon::today());
 
         // Get count of facts created yesterday
-        $yesterday = Fact::query()->whereDate('created_at', Carbon::yesterday())->count();
-
-        $now = Carbon::now();
+        $yesterday = $this->factRepository->countByDate(Carbon::yesterday());
 
         // Get count of facts created in current month
-        $thisMonth = Fact::query()
-            ->whereMonth('created_at', $now->month)
-            ->whereYear('created_at', $now->year)
-            ->count();
+        $thisMonth = $this->factRepository->countByMonth(Carbon::now());
 
         // Get the most recent facts limited by limit option
-        $recent = Fact::query()->latest('id')->limit($this->limit)->get();
+        $recent = $this->factRepository->getRecent($this->limit);
 
         // Return the view with all statistics data
         return view('facts.stats', compact(
@@ -123,9 +128,7 @@ class FactsController extends Controller
         }
 
         // Search facts by content containing the query string
-        $facts = Fact::query()->where('content', 'like', '%' . $query . '%')
-            ->latest('id')
-            ->paginate($this->defaultPerPage);
+        $facts = $this->factRepository->search($query, $this->defaultPerPage);
 
         // Return the search results view
         return view('facts.search', compact('facts', 'query'));

@@ -13,14 +13,15 @@
 
 namespace App\Services\Fact;
 
-use App\Services\LoggerService;
+use App\Services\Fact\Contracts\AIServiceInterface;
+use App\Services\Logging\Contracts\LoggerInterface;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
 /**
  * Handles API calls, prompt creation, and fact generation.
  */
-class GroqService
+class GroqService implements AIServiceInterface
 {
     /**
      * API key for authentication with the Groq API.
@@ -40,10 +41,10 @@ class GroqService
     /**
      * Creates a new instance.
      *
-     * @param LoggerService $logger Logger service for logging API calls and errors
+     * @param LoggerInterface $logger Logger service for logging API calls and errors
      */
     public function __construct(
-        protected readonly LoggerService $logger
+        protected readonly LoggerInterface $logger
     ) {
         // Load configuration values
         $this->apiKey = config('services.groq.api_key');

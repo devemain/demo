@@ -14,9 +14,9 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\Api\ApiErrorHandlerService;
 use App\Services\Fact\FactService;
-use App\Services\LoggerService;
-use App\Traits\Api\ErrorHandlerTrait;
+use App\Services\Logging\Contracts\LoggerInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -24,21 +24,20 @@ use Throwable;
 
 /**
  * Handles cron job related operations, specifically for generating facts.
- * It utilizes dependency injection for FactService and LoggerService.
  */
 class CronController extends Controller
 {
-    use ErrorHandlerTrait;
-
     /**
      * Creates a new instance.
      *
      * @param FactService $factService Service responsible for generating facts
-     * @param LoggerService $logger Service responsible for logging activities
+     * @param LoggerInterface $logger Service responsible for logging activities
+     * @param ApiErrorHandlerService $errorHandler Service responsible for handling API errors
      */
     public function __construct(
         protected readonly FactService $factService,
-        protected readonly LoggerService $logger
+        protected readonly LoggerInterface $logger,
+        protected readonly ApiErrorHandlerService $errorHandler
     ) {}
 
     /**
@@ -79,8 +78,8 @@ class CronController extends Controller
             ]);
 
         } catch (Throwable $e) {
-            // Handle any exceptions that occur during the process
-            return $this->handleApiError($e, 'Failed to generate facts');
+            // Handle any unexpected errors using centralized error handler
+            return $this->errorHandler->handleError($e, $this->logger, 'Failed to generate facts');
         }
     }
 }

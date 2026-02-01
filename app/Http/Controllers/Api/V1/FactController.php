@@ -15,9 +15,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Fact;
+use App\Repositories\Contracts\FactRepositoryInterface;
+use App\Services\Api\ApiErrorHandlerService;
 use App\Services\Fact\FactService;
-use App\Services\LoggerService;
-use App\Traits\Api\ErrorHandlerTrait;
+use App\Services\Logging\Contracts\LoggerInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Throwable;
@@ -29,17 +30,19 @@ use Throwable;
  */
 class FactController extends Controller
 {
-    use ErrorHandlerTrait;
-
     /**
      * Creates a new instance.
      *
      * @param FactService $factService Service responsible for generating facts
-     * @param LoggerService $logger Service responsible for logging activities
+     * @param FactRepositoryInterface $factRepository Repository for fact data operations
+     * @param LoggerInterface $logger Service responsible for logging activities
+     * @param ApiErrorHandlerService $errorHandler Service responsible for handling API errors
      */
     public function __construct(
         protected readonly FactService $factService,
-        protected readonly LoggerService $logger
+        protected readonly FactRepositoryInterface $factRepository,
+        protected readonly LoggerInterface $logger,
+        protected readonly ApiErrorHandlerService $errorHandler
     ) {}
 
     /**
@@ -82,14 +85,14 @@ class FactController extends Controller
                 'success' => true,
                 'data' => $fact,
                 'meta' => [
-                    'total_facts' => Fact::query()->count(),
+                    'total_facts' => $this->factRepository->count(),
                     'timestamp' => Carbon::now()->toISOString(),
                 ]
             ], options: JSON_UNESCAPED_UNICODE);
 
         } catch (Throwable $e) {
-            // Handle any unexpected errors
-            return $this->handleApiError($e, 'Failed to get fact');
+            // Handle any unexpected errors using centralized error handler
+            return $this->errorHandler->handleError($e, $this->logger, 'Failed to get fact');
         }
     }
 
@@ -108,7 +111,7 @@ class FactController extends Controller
     public function getFactById(int $id): JsonResponse
     {
         // Find the fact by ID
-        $fact = Fact::query()->find($id);
+        $fact = $this->factRepository->findById($id);
 
         // Check if the fact exists
         if (!$fact instanceof Fact) {

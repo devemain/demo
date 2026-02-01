@@ -31,13 +31,14 @@ A professional Laravel project template showcasing modern development practices,
 ## Features
 
 ### Development Foundation:
+- **Modern PHP Practices** - Clean code architecture and following Laravel conventions
+- **SOLID Principles** - Clean architecture and maintainable code
 - **Custom Development Tools** - CLI utilities for common tasks
 - **Dockerized Environment** - Pre-configured with essential services
 - **CI/CD Pipeline** - Automated building and deployment with GitHub Actions
 - **Automated Workflows** - Git hooks and deployment scripts
 - **Semantic Commits** - Enforced commit message conventions for clean history
 - **Automated Tagging** - Configured bot for automatic version tagging
-- **Modern PHP Practices** - Clean code architecture and following Laravel conventions
 - **Vue.js Integration** - Progressive JavaScript framework for reactive interfaces
 
 ### AI-Powered Content:

@@ -11,8 +11,11 @@
  * @link      https://github.com/DeveMain
  */
 
-namespace App\Services;
+namespace App\Services\Logging;
 
+use App\Services\Logging\Contracts\ChannelResolverInterface;
+use App\Services\Logging\Contracts\LoggerInterface;
+use App\Services\Logging\Contracts\MessageFormatterInterface;
 use BadMethodCallException;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +23,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Handles logging operations with different log levels and channels.
  */
-class LoggerService
+class LoggerService implements LoggerInterface
 {
     /**
      * Array of allowed logging methods. This array is used to determine if a method call is valid.
@@ -32,28 +35,22 @@ class LoggerService
     ];
 
     /**
-     * The caller information (class::method). This is used to prefix log messages.
+     * The current logging channel. This can be changed using the setChannel method.
      */
-    private string $caller = '';
-
-    /**
-     * The logging channel to use. Defaults to 'daily'. This can be changed using the setChannel method.
-     */
-    private string $channel = 'daily';
-
-    /**
-     * The separator between caller and message. Defaults to ' --> '. This can be changed using the setSeparator method.
-     */
-    private string $separator = ' --> ';
+    protected string $channel = 'daily';
 
     /**
      * Creates a new instance.
      *
-     * Initializes the logger with an optional full method name.
+     * @param ChannelResolverInterface $channelResolver Service for determining logging channels
+     * @param MessageFormatterInterface $messageFormatter Service for formatting log messages
      * @param string|null $fullMethod Optional full method name (Class::method) to set as caller
      */
-    public function __construct(?string $fullMethod = null)
-    {
+    public function __construct(
+        protected readonly ChannelResolverInterface $channelResolver,
+        protected readonly MessageFormatterInterface $messageFormatter,
+        ?string $fullMethod = null
+    ) {
         if ($fullMethod) {
             $this->setCaller($fullMethod);
         }
@@ -61,7 +58,11 @@ class LoggerService
 
     /**
      * Magic method to handle log level calls.
-     * If the method name is not in the ALLOWED_METHODS array, a BadMethodCallException is thrown.
+     *
+     * @param string $method The method name being called
+     * @param array $args The arguments passed to the method
+     * @return void
+     * @throws BadMethodCallException If the method is not a valid logging method
      */
     public function __call(string $method, array $args): void
     {
@@ -83,25 +84,9 @@ class LoggerService
     {
         list($class, $method) = explode('::', $fullMethod, 2);
 
-        // Only class name without namespace
-        $parts = explode('\\', $class);
-        $className = end($parts);
+        $this->messageFormatter->setCaller($class, $method);
+        $this->channel = $this->channelResolver->resolveChannel($class);
 
-        $this->caller = $className . '::' . $method;
-        $this->channel = $this->determineChannel($class);
-
-        return $this;
-    }
-
-    /**
-     * Set the message separator. This is used to separate the caller and message in log messages.
-     *
-     * @param string $separator The separator string
-     * @return self
-     */
-    public function setSeparator(string $separator): self
-    {
-        $this->separator = $separator;
         return $this;
     }
 
@@ -110,6 +95,7 @@ class LoggerService
      *
      * @param string $message
      * @param array $context
+     * @return void
      */
     public function emergency(string $message, array $context = []): void
     {
@@ -121,6 +107,7 @@ class LoggerService
      *
      * @param string $message
      * @param array $context
+     * @return void
      */
     public function alert(string $message, array $context = []): void
     {
@@ -132,6 +119,7 @@ class LoggerService
      *
      * @param string $message
      * @param array $context
+     * @return void
      */
     public function critical(string $message, array $context = []): void
     {
@@ -143,6 +131,7 @@ class LoggerService
      *
      * @param string $message
      * @param array $context
+     * @return void
      */
     public function error(string $message, array $context = []): void
     {
@@ -154,6 +143,7 @@ class LoggerService
      *
      * @param string $message
      * @param array $context
+     * @return void
      */
     public function warning(string $message, array $context = []): void
     {
@@ -165,6 +155,7 @@ class LoggerService
      *
      * @param string $message
      * @param array $context
+     * @return void
      */
     public function notice(string $message, array $context = []): void
     {
@@ -176,6 +167,7 @@ class LoggerService
      *
      * @param string $message
      * @param array $context
+     * @return void
      */
     public function info(string $message, array $context = []): void
     {
@@ -187,10 +179,23 @@ class LoggerService
      *
      * @param string $message
      * @param array $context
+     * @return void
      */
     public function debug(string $message, array $context = []): void
     {
         $this->write('debug', $message, $context);
+    }
+
+    /**
+     * Set the logging channel.
+     *
+     * @param string $channel
+     * @return self
+     */
+    public function setChannel(string $channel): self
+    {
+        $this->channel = $channel;
+        return $this;
     }
 
     /**
@@ -207,29 +212,14 @@ class LoggerService
     /**
      * Write a log message with the specified level.
      *
-     * @param string $level
-     * @param string $message
-     * @param array $context
+     * @param string $level The log level
+     * @param string $message The message to log
+     * @param array $context Additional context data
+     * @return void
      */
     protected function write(string $level, string $message, array $context = []): void
     {
-        $fullMessage = $this->caller ? $this->caller . $this->separator . $message : $message;
+        $fullMessage = $this->messageFormatter->format($message);
         Log::channel($this->channel)->$level($fullMessage, $context);
-    }
-
-    /**
-     * Determine the logging channel based on the class namespace.
-     *
-     * @param string $class
-     * @return string
-     */
-    protected function determineChannel(string $class): string
-    {
-        return match(true) {
-            str_contains($class, '\Api\Admin\\') => 'api-admin',
-            str_contains($class, '\Api\V1\\'), str_contains($class, '\Api\\') => 'api-v1',
-            str_contains($class, '\Services\\') => 'service',
-            default => 'daily'
-        };
     }
 }
