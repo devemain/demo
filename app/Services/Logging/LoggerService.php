@@ -82,7 +82,7 @@ class LoggerService implements LoggerInterface
      */
     public function setCaller(string $fullMethod): self
     {
-        list($class, $method) = explode('::', $fullMethod, 2);
+        [$class, $method] = explode('::', $fullMethod, 2);
 
         $this->messageFormatter->setCaller($class, $method);
         $this->channel = $this->channelResolver->resolveChannel($class);

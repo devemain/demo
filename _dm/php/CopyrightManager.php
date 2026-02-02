@@ -81,14 +81,14 @@ class CopyrightManager
             }
 
             $this->cli->dir($dir, true);
-            list($dirProcessed, $dirSkipped) = $this->processDirectory($dir);
+            [$dirProcessed, $dirSkipped] = $this->processDirectory($dir);
             $processed += $dirProcessed;
             $skipped += $dirSkipped;
         }
 
         // Parse root files
         $this->cli->frame(($removeMode ? 'Deleting' : 'Updating') . ' copyright in root files');
-        list($dirProcessed, $dirSkipped) = $this->processRootFiles();
+        [$dirProcessed, $dirSkipped] = $this->processRootFiles();
         $processed += $dirProcessed;
         $skipped += $dirSkipped;
 
