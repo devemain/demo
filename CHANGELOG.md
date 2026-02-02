@@ -1,3 +1,9 @@
+## [1.2.3](https://github.com/devemain/demo/compare/v1.2.2...v1.2.3) (2026-02-02)
+
+### 💄 Styling
+
+* migrate from list() to [] array destructuring [skip cd] ([afbbdca](https://github.com/devemain/demo/commit/afbbdca13ef98fc2c1ef85f91041cbf9ad87bf22))
+
 ## [1.2.2](https://github.com/devemain/demo/compare/v1.2.1...v1.2.2) (2026-02-01)
 
 ### 🔧 Refactoring
