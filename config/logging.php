@@ -1,11 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * 2026 DeveMain
+ *
+ * All rights reserved. For internal use only.
+ * Unauthorized copying, modification, or distribution is prohibited.
+ *
+ * @author    DeveMain <devemain@gmail.com>
+ * @copyright 2026 DeveMain
+ * @license   PROPRIETARY
+ *
+ * @link      https://github.com/DeveMain
+ */
+
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
-function makeDailyChannel(string $name): array {
+function makeDailyChannel(string $name): array
+{
     return [
         'driver' => 'daily',
         'path' => storage_path('logs/' . date('Y/m/') . $name . '.log'),
@@ -98,7 +114,7 @@ return [
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
@@ -135,7 +151,6 @@ return [
         'emergency' => [
             'path' => storage_path('logs/kernel/kernel.log'), // Custom
         ],
-
 
         // Custom
         'debug' => [

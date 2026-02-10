@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -27,8 +31,8 @@ class FactRepository implements FactRepositoryInterface
     /**
      * Find a fact by ID.
      *
-     * @param int $id
-     * @return Fact|null
+     * @param  int  $id  Fact ID to search for
+     * @return Fact|null Found fact or null if not found
      */
     public function findById(int $id): ?Fact
     {
@@ -38,7 +42,7 @@ class FactRepository implements FactRepositoryInterface
     /**
      * Save facts to database with upsert operation.
      *
-     * @param array $facts Array of facts to save
+     * @param  array  $facts  Array of facts to save
      * @return array Array of saved facts
      */
     public function saveFacts(array $facts): array
@@ -63,9 +67,6 @@ class FactRepository implements FactRepositoryInterface
 
     /**
      * Mark fact as shown and increment views.
-     *
-     * @param Fact $fact
-     * @return bool
      */
     public function markAsShown(Fact $fact): bool
     {
@@ -77,8 +78,6 @@ class FactRepository implements FactRepositoryInterface
 
     /**
      * Get the least shown fact (fair rotation).
-     *
-     * @return Fact|null
      */
     public function getFreshFact(): ?Fact
     {
@@ -92,8 +91,6 @@ class FactRepository implements FactRepositoryInterface
 
     /**
      * Get a truly random fact.
-     *
-     * @return Fact|null
      */
     public function getRandomFact(): ?Fact
     {
@@ -104,9 +101,6 @@ class FactRepository implements FactRepositoryInterface
 
     /**
      * Get multiple random facts.
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getRandomFacts(int $limit = 5): Collection
     {
@@ -119,8 +113,7 @@ class FactRepository implements FactRepositoryInterface
     /**
      * Get recent facts limited by count.
      *
-     * @param int $limit Maximum number of facts to return
-     * @return Collection
+     * @param  int  $limit  Maximum number of facts to return
      */
     public function getRecent(int $limit = 10): Collection
     {
@@ -133,9 +126,8 @@ class FactRepository implements FactRepositoryInterface
     /**
      * Get paginated facts ordered by latest.
      *
-     * @param int $perPage Number of items per page
-     * @param int $page Current page number
-     * @return LengthAwarePaginator
+     * @param  int  $perPage  Number of items per page
+     * @param  int  $page  Current page number
      */
     public function getPaginated(int $perPage = 20, int $page = 1): LengthAwarePaginator
     {
@@ -147,9 +139,8 @@ class FactRepository implements FactRepositoryInterface
     /**
      * Search facts by content.
      *
-     * @param string $query Search query
-     * @param int $perPage Number of items per page
-     * @return LengthAwarePaginator
+     * @param  string  $query  Search query
+     * @param  int  $perPage  Number of items per page
      */
     public function search(string $query, int $perPage = 20): LengthAwarePaginator
     {
@@ -161,8 +152,6 @@ class FactRepository implements FactRepositoryInterface
 
     /**
      * Check if any facts exist.
-     *
-     * @return bool
      */
     public function exists(): bool
     {
@@ -171,8 +160,6 @@ class FactRepository implements FactRepositoryInterface
 
     /**
      * Get total count of facts.
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -182,8 +169,7 @@ class FactRepository implements FactRepositoryInterface
     /**
      * Get count of facts created on a specific date.
      *
-     * @param Carbon $date Date object
-     * @return int
+     * @param  Carbon  $date  Date object
      */
     public function countByDate(Carbon $date): int
     {
@@ -195,8 +181,7 @@ class FactRepository implements FactRepositoryInterface
     /**
      * Get count of facts created in a specific month and year.
      *
-     * @param Carbon $date Date object representing the month
-     * @return int
+     * @param  Carbon  $date  Date object representing the month
      */
     public function countByMonth(Carbon $date): int
     {

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -28,7 +32,7 @@ class VerifyCronSecret
     /**
      * Creates a new instance.
      *
-     * @param LoggerInterface $logger Service for logging activities
+     * @param  LoggerInterface  $logger  Service for logging activities
      */
     public function __construct(
         protected readonly LoggerInterface $logger
@@ -37,8 +41,8 @@ class VerifyCronSecret
     /**
      * Handle an incoming request.
      *
-     * @param Request $request The incoming HTTP request instance
-     * @param Closure $next The next middleware in the pipeline
+     * @param  Request  $request  The incoming HTTP request instance
+     * @param  Closure  $next  The next middleware in the pipeline
      * @return JsonResponse The response after processing the request
      */
     public function handle(Request $request, Closure $next): JsonResponse
@@ -62,7 +66,7 @@ class VerifyCronSecret
 
             // Return a 401 Unauthorized response with error message
             return response()->json([
-                'error' => 'Invalid or missing cron secret'
+                'error' => 'Invalid or missing cron secret',
             ], 401);
         }
 

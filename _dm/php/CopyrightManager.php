@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,13 +11,14 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
 namespace Devemain;
 
-use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * Managing copyright notices in project files.
@@ -50,14 +54,14 @@ class CopyrightManager
     /**
      * Creates a new instance.
      *
-     * @param CliHelper $cli CLI helper for command line operations
+     * @param  CliHelper  $cli  CLI helper for command line operations
      */
     public function __construct(
         private readonly CliHelper $cli
     ) {
         $this->year = date('Y');
         $this->copyrightTemplate = $this->getCopyrightTemplate();
-        $this->directories = ['_dm', 'app', 'database', 'resources', 'routes', '.github'];
+        $this->directories = ['.github', '_dm', 'app', 'bootstrap', 'config', 'database', 'public', 'resources', 'routes', 'tests'];
         $this->extensions = ['php', 'js', 'css', 'scss', 'sh', 'yml', 'yaml', 'vue'];
         $this->rootFiles = ['dm.sh', 'docker.sh', 'docker-compose.yml', 'Dockerfile'];
     }
@@ -69,14 +73,14 @@ class CopyrightManager
     {
         $removeMode = $this->cli->hasOption('remove');
 
-        $this->cli->frame(($removeMode ? 'Deleting' : 'Updating') . ' copyright');
+        $this->cli->frame(($removeMode ? 'Removing' : 'Updating') . ' copyright');
 
-        $processed = 0;
-        $skipped = 0;
+        $processed = $skipped = 0;
 
         foreach ($this->directories as $dir) {
             if (!is_dir($dir)) {
                 $this->cli->warning('Skipped: ' . $dir . ' (no such directory)', true);
+
                 continue;
             }
 
@@ -87,7 +91,7 @@ class CopyrightManager
         }
 
         // Parse root files
-        $this->cli->frame(($removeMode ? 'Deleting' : 'Updating') . ' copyright in root files');
+        $this->cli->frame(($removeMode ? 'Removing' : 'Updating') . ' copyright in root files');
         [$dirProcessed, $dirSkipped] = $this->processRootFiles();
         $processed += $dirProcessed;
         $skipped += $dirSkipped;
@@ -99,13 +103,12 @@ class CopyrightManager
     /**
      * Process all files in a directory for copyright operations.
      *
-     * @param string $dir Directory path to process
+     * @param  string  $dir  Directory path to process
      * @return array Array containing [processedCount, skippedCount]
      */
     private function processDirectory(string $dir): array
     {
-        $processed = 0;
-        $skipped = 0;
+        $processed = $skipped = 0;
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
@@ -118,6 +121,12 @@ class CopyrightManager
             }
 
             $path = $file->getPathname();
+
+            // Skip cache directories
+            if (str_contains($path, '/cache/')) {
+                continue;
+            }
+
             $filename = $file->getFilename();
             $extension = $file->getExtension();
             $isBlade = str_contains($filename, '.blade.php');
@@ -149,8 +158,7 @@ class CopyrightManager
      */
     private function processRootFiles(): array
     {
-        $processed = 0;
-        $skipped = 0;
+        $processed = $skipped = 0;
 
         foreach ($this->rootFiles as $path) {
             if (!file_exists($path)) {
@@ -179,16 +187,16 @@ class CopyrightManager
     /**
      * Process a single file for copyright operations.
      *
-     * @param string $path File path
-     * @param string $filename File name
-     * @param string $content File content
-     * @param string $extension File extension
-     * @param bool $isBlade Whether the file is a Blade template
-     * @param int &$processed Reference to processed files counter
-     * @param int &$skipped Reference to skipped files counter
+     * @param  string  $path  File path
+     * @param  string  $filename  File name
+     * @param  string  $content  File content
+     * @param  string  $extension  File extension
+     * @param  bool  $isBlade  Whether the file is a Blade template
+     * @param  int  &$processed  Reference to processed files counter
+     * @param  int  &$skipped  Reference to skipped files counter
      */
     private function processFile(string $path, string $filename, string $content, string $extension,
-                                 bool $isBlade, int &$processed, int &$skipped): void
+        bool $isBlade, int &$processed, int &$skipped): void
     {
         if ($this->cli->hasOption('remove')) {
             if ($this->hasDeveMainCopyright($content)) {
@@ -210,15 +218,18 @@ class CopyrightManager
     /**
      * Update a file with copyright header.
      *
-     * @param string $path File path
-     * @param string $content Current file content
-     * @param string $extension File extension
-     * @param bool $isBlade Whether the file is a Blade template
+     * @param  string  $path  File path
+     * @param  string  $content  Current file content
+     * @param  string  $extension  File extension
+     * @param  bool  $isBlade  Whether the file is a Blade template
      * @return bool True if file was successfully updated, false otherwise
      */
     private function updateFile(string $path, string $content, string $extension, bool $isBlade): bool
     {
-        $header = $this->getCopyrightHeader($path, $isBlade);
+        // Check if declare(strict_types=1) already exists
+        $hasStrictTypes = str_contains($content, Fmt::STRICT_TYPES);
+
+        $header = $this->getCopyrightHeader($path, $isBlade, $hasStrictTypes);
 
         if ($this->hasDeveMainCopyright($content)) {
             $newContent = $this->replaceCopyright($content, $header, $path, $extension, $isBlade);
@@ -246,6 +257,7 @@ class CopyrightManager
              * @author    DeveMain <devemain@gmail.com>
              * @copyright $this->year DeveMain
              * @license   PROPRIETARY
+             *
              * @link      https://github.com/DeveMain
              */
             COPYRIGHT;
@@ -254,7 +266,7 @@ class CopyrightManager
     /**
      * Check if content contains a DeveMain copyright notice.
      *
-     * @param string $content File content to check
+     * @param  string  $content  File content to check
      * @return bool True if DeveMain copyright is found, false otherwise
      */
     private function hasDeveMainCopyright(string $content): bool
@@ -265,14 +277,15 @@ class CopyrightManager
     /**
      * Generate a copyright header formatted for a specific file type.
      *
-     * @param string $path File path
-     * @param bool $isBlade Whether the file is a Blade template
+     * @param  string  $path  File path
+     * @param  bool  $isBlade  Whether the file is a Blade template
+     * @param  bool  $hasStrictTypes  Whether the file has strict types declaration
      * @return string Formatted copyright header for the file type
      */
-    private function getCopyrightHeader(string $path, bool $isBlade): string
+    private function getCopyrightHeader(string $path, bool $isBlade, bool $hasStrictTypes = false): string
     {
         // Extracting plain text without /** and */
-        $lines = explode(PHP_EOL, $this->copyrightTemplate);
+        $lines = explode(Fmt::EOL, $this->copyrightTemplate);
         $cleanLines = [];
 
         foreach ($lines as $line) {
@@ -292,72 +305,82 @@ class CopyrightManager
         }
 
         if ($isBlade) {
-            $result = '{{--' . PHP_EOL;
+            $result = '{{--' . Fmt::EOL;
             foreach ($cleanLines as $line) {
-                $result .= ' |' . ($line !== '' ? ' ' . $line : '') . PHP_EOL;
+                $result .= ' |' . ($line !== '' ? ' ' . $line : '') . Fmt::EOL;
             }
-            return $result . ' --}}' . CliHelper::PHP_EOL2;
+
+            return $result . ' --}}' . Fmt::EOL2;
         }
 
         $filename = basename($path);
         $extension = pathinfo($path, PATHINFO_EXTENSION);
 
         if ($filename === 'Dockerfile') {
-            $result = '# ============================================================================' . PHP_EOL;
+            $result = '# ============================================================================' . Fmt::EOL;
             foreach ($cleanLines as $line) {
-                $result .= '#' . ($line !== '' ? ' ' . $line : '') . PHP_EOL;
+                $result .= '#' . ($line !== '' ? ' ' . $line : '') . Fmt::EOL;
             }
-            return $result . '# ============================================================================' . CliHelper::PHP_EOL2;
+
+            return $result . '# ============================================================================' . Fmt::EOL2;
         }
 
         switch ($extension) {
             case 'php':
-                $result = '<?php' . PHP_EOL . '/**' . PHP_EOL;
-                foreach ($cleanLines as $line) {
-                    $result .= ' *' . ($line !== '' ? ' ' . $line : '') . PHP_EOL;
+                if ($hasStrictTypes) {
+                    $result = Fmt::PHP_OPEN . Fmt::EOL2 . Fmt::strictTypes() . '/**' . Fmt::EOL;
+                } else {
+                    $result = Fmt::PHP_OPEN . Fmt::EOL . '/**' . Fmt::EOL;
                 }
-                return $result . ' */' . CliHelper::PHP_EOL2;
+                foreach ($cleanLines as $line) {
+                    $result .= ' *' . ($line !== '' ? ' ' . $line : '') . Fmt::EOL;
+                }
+
+                return $result . ' */' . Fmt::EOL2;
 
             case 'css':
             case 'scss':
-                $result = '/*!' . PHP_EOL;
+                $result = '/*!' . Fmt::EOL;
                 foreach ($cleanLines as $line) {
-                    $result .= ' *' . ($line !== '' ? ' ' . $line : '') . PHP_EOL;
+                    $result .= ' *' . ($line !== '' ? ' ' . $line : '') . Fmt::EOL;
                 }
-                return $result . ' */' . CliHelper::PHP_EOL2;
+
+                return $result . ' */' . Fmt::EOL2;
 
             case 'yml':
             case 'yaml':
             case 'sh':
-                $result = '# ============================================================================' . PHP_EOL;
+                $result = '# ============================================================================' . Fmt::EOL;
                 foreach ($cleanLines as $line) {
-                    $result .= '#' . ($line !== '' ? ' ' . $line : '') . PHP_EOL;
+                    $result .= '#' . ($line !== '' ? ' ' . $line : '') . Fmt::EOL;
                 }
-                return $result . '# ============================================================================' . CliHelper::PHP_EOL2;
+
+                return $result . '# ============================================================================' . Fmt::EOL2;
 
             case 'json':
                 return '';
 
             case 'md':
             case 'vue':
-                return '<!--' . PHP_EOL . implode(PHP_EOL, $cleanLines) . PHP_EOL . '-->' . CliHelper::PHP_EOL2;
+                return '<!--' . Fmt::EOL . implode(Fmt::EOL, $cleanLines) . Fmt::EOL . '-->' . Fmt::EOL2;
 
             case 'js':
             default:
-                $result = '/**' . PHP_EOL;
+                $result = '/**' . Fmt::EOL;
                 foreach ($cleanLines as $line) {
-                    $result .= ' *' . ($line !== '' ? ' ' . $line : '') . PHP_EOL;
+                    $result .= ' *' . ($line !== '' ? ' ' . $line : '') . Fmt::EOL;
                 }
-                return $result . ' */' . CliHelper::PHP_EOL2;
+
+                return $result . ' */' . Fmt::EOL2;
         }
     }
 
     /**
      * Remove copyright notice from file content.
      *
-     * @param string $content File content
-     * @param string $path File path
-     * @param bool $isBlade Whether the file is a Blade template
+     * @param  string  $content  File content
+     * @param  string  $path  File path
+     * @param  bool  $isBlade  Whether the file is a Blade template
      * @return string Content with copyright removed
      */
     private function removeCopyright(string $content, string $path, bool $isBlade): string
@@ -368,27 +391,32 @@ class CopyrightManager
         // For Blade templates
         if ($isBlade) {
             $pattern = '/\{\{--[\s\S]*?DeveMain[\s\S]*?--\}\}\s*\n*/';
+
             return preg_replace($pattern, '', $content, 1);
         }
 
         // For YAML files & Dockerfile
         if (in_array($extension, ['yml', 'yaml'], true) || $filename === 'Dockerfile') {
             $pattern = '/# ============================================================================[\s\S]*?# ============================================================================\s*\n*/';
+
             return preg_replace($pattern, '', $content, 1);
         }
 
         switch ($extension) {
             case 'php':
-                $pattern = '/(<\?php\s*\n*)\/\*\*[\s\S]*?\*\/\s*\n*/s';
-                return preg_replace($pattern, '$1' . PHP_EOL, $content, 1);
+                $pattern = '/^(<\?php(?:\s*declare\(strict_types=1\);)?)\s*\/\*\*.*?\*\/\n*/ms';
+
+                return preg_replace($pattern, '$1' . Fmt::EOL2, $content, 1);
 
             case 'js':
                 $pattern = '/\/\*\*[\s\S]*?\*\/\s*\n*/s';
+
                 return preg_replace($pattern, '', $content, 1);
 
             case 'css':
             case 'scss':
                 $pattern = '/\/\*\![\s\S]*?\*\/\s*\n*/s';
+
                 return preg_replace($pattern, '', $content, 1);
 
             case 'sh':
@@ -400,11 +428,13 @@ class CopyrightManager
                 foreach ($patterns as $pattern) {
                     $content = preg_replace($pattern, '$1', $content, 1);
                 }
+
                 return $content;
 
             case 'md':
             case 'vue':
                 $pattern = '/<!--[\s\S]*?-->\s*\n*/s';
+
                 return preg_replace($pattern, '', $content, 1);
 
             default:
@@ -415,25 +445,26 @@ class CopyrightManager
     /**
      * Replace existing copyright notice with a new one.
      *
-     * @param string $content Current file content
-     * @param string $header New copyright header
-     * @param string $path File path
-     * @param string $extension File extension
-     * @param bool $isBlade Whether the file is a Blade template
+     * @param  string  $content  Current file content
+     * @param  string  $header  New copyright header
+     * @param  string  $path  File path
+     * @param  string  $extension  File extension
+     * @param  bool  $isBlade  Whether the file is a Blade template
      * @return string Content with updated copyright
      */
     private function replaceCopyright(string $content, string $header, string $path, string $extension, bool $isBlade): string
     {
         $contentWithoutCopyright = $this->removeCopyright($content, $path, $isBlade);
+
         return $this->addHeaderToContent($contentWithoutCopyright, $header, $extension);
     }
 
     /**
      * Add copyright header to the beginning of file content.
      *
-     * @param string $content Original file content
-     * @param string $header Copyright header to add
-     * @param string $extension File extension
+     * @param  string  $content  Original file content
+     * @param  string  $header  Copyright header to add
+     * @param  string  $extension  File extension
      * @return string Content with copyright header added
      */
     private function addHeaderToContent(string $content, string $header, string $extension): string
@@ -442,24 +473,23 @@ class CopyrightManager
 
         switch ($extension) {
             case 'php':
-                // Remove possible <?php from the beginning of the content if it is already in the header
-                if (str_starts_with($header, '<?php') && str_starts_with(trim($content), '<?php')) {
-                    $content = substr($content, 5);
-                    $content = ltrim($content, "\n\r\t ");
-                }
+                // Remove opening PHP tag and optional strict types declaration from the beginning
+                $pattern = '/^<\?php\s*(?:' . Fmt::STRICT_TYPES_PATTERN . ')?/';
+                $content = preg_replace($pattern, '', $content, 1);
                 break;
 
             case 'sh':
                 // For SH: the shebang should come first, then our title
                 if (str_starts_with(trim($content), '#!')) {
-                    $firstNewline = strpos($content, PHP_EOL);
+                    $firstNewline = strpos($content, Fmt::EOL);
                     if ($firstNewline === false) {
                         // Only shebang without line breaks
-                        return $content . PHP_EOL . $header;
+                        return $content . Fmt::EOL . $header;
                     }
                     $shebang = substr($content, 0, $firstNewline + 1);
                     $rest = substr($content, $firstNewline + 1);
                     $rest = ltrim($rest, "\n\r\t ");
+
                     return $shebang . $header . $rest;
                 }
                 break;
@@ -467,11 +497,12 @@ class CopyrightManager
             case 'yml':
             case 'yaml':
                 if (str_starts_with(trim($content), '---')) {
-                    $firstNewline = strpos($content, PHP_EOL);
+                    $firstNewline = strpos($content, Fmt::EOL);
                     if ($firstNewline !== false) {
                         $firstLine = substr($content, 0, $firstNewline + 1);
                         $rest = substr($content, $firstNewline + 1);
                         $rest = ltrim($rest, "\n\r\t ");
+
                         return $firstLine . $header . $rest;
                     }
                 }

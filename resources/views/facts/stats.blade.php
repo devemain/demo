@@ -7,6 +7,7 @@
  | @author    DeveMain <devemain@gmail.com>
  | @copyright 2026 DeveMain
  | @license   PROPRIETARY
+ |
  | @link      https://github.com/DeveMain
  --}}
 

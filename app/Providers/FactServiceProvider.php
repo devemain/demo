@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -28,8 +32,6 @@ class FactServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -41,8 +43,6 @@ class FactServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap services.
-     *
-     * @return void
      */
     public function boot(): void
     {

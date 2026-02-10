@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -26,9 +30,9 @@ class FactService
     /**
      * Creates a new instance.
      *
-     * @param AIServiceInterface $aiService Service for AI-powered fact generation
-     * @param FactRepositoryInterface $factRepository Repository for fact data operations
-     * @param FallbackFactsProviderInterface $fallbackProvider Provider of fallback facts
+     * @param  AIServiceInterface  $aiService  Service for AI-powered fact generation
+     * @param  FactRepositoryInterface  $factRepository  Repository for fact data operations
+     * @param  FallbackFactsProviderInterface  $fallbackProvider  Provider of fallback facts
      */
     public function __construct(
         protected readonly AIServiceInterface $aiService,
@@ -39,7 +43,7 @@ class FactService
     /**
      * Generate facts using AI or fallback to pre-defined facts.
      *
-     * @param int $count Number of facts to generate (default: 10)
+     * @param  int  $count  Number of facts to generate (default: 10)
      * @return array Array of generated facts
      */
     public function generateFacts(int $count = 10): array
@@ -57,8 +61,6 @@ class FactService
 
     /**
      * Get the least shown fact (fair rotation).
-     *
-     * @return Fact|null
      */
     public function getFreshFact(): ?Fact
     {
@@ -71,9 +73,6 @@ class FactService
 
     /**
      * Mark fact as shown and increment views.
-     *
-     * @param Fact $fact
-     * @return bool
      */
     public function markAsShown(Fact $fact): bool
     {
@@ -83,7 +82,7 @@ class FactService
     /**
      * Create fallback facts when AI is unavailable.
      *
-     * @param int $count Number of facts to create
+     * @param  int  $count  Number of facts to create
      * @return array Array of fallback facts
      */
     protected function createFallbackFacts(int $count = 10): array

@@ -1,5 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * 2026 DeveMain
+ *
+ * All rights reserved. For internal use only.
+ * Unauthorized copying, modification, or distribution is prohibited.
+ *
+ * @author    DeveMain <devemain@gmail.com>
+ * @copyright 2026 DeveMain
+ * @license   PROPRIETARY
+ *
+ * @link      https://github.com/DeveMain
+ */
+
 return [
 
     /*
@@ -41,7 +56,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -24,7 +28,7 @@ trait CommandOptionsTrait
      * Stores the name of the script/program.
      */
     private string $scriptName = '';
-    
+
     /**
      * Stores the parsed command line options.
      */
@@ -33,7 +37,7 @@ trait CommandOptionsTrait
     /**
      * Maps a command line argument to a named option.
      *
-     * @param string $arg The command line argument to map     *
+     * @param  string  $arg  The command line argument to map     *
      * @return string|null The name of the option if it's recognized, null otherwise
      */
     protected function mapArgumentToOption(string $arg): ?string
@@ -49,10 +53,13 @@ trait CommandOptionsTrait
     /**
      * Parses command line arguments.
      *
-     * @param array $argv The command line arguments array (typically $argv from PHP)
+     * @param  array  $argv  The command line arguments array (typically $argv from PHP)
      */
     final public function parseCommandLine(array $argv): void
     {
+        // Type normalization
+        $argv = array_map('strval', $argv);
+
         $this->scriptName = $argv[0] ?? '';
         $this->options = [];
 
@@ -77,7 +84,7 @@ trait CommandOptionsTrait
     /**
      * Checks if a specific option is set.
      *
-     * @param string $name The name of the option to check
+     * @param  string  $name  The name of the option to check
      * @return bool True if the option is set and true, false otherwise
      */
     final public function hasOption(string $name): bool
@@ -88,11 +95,11 @@ trait CommandOptionsTrait
     /**
      * Gets the value of a specific option.
      *
-     * @param string $name The name of the option to retrieve
-     * @param bool $default The default value to return if the option is not set
-     * @return mixed The value of the option or the default value
+     * @param  string  $name  The name of the option to retrieve
+     * @param  bool  $default  The default value to return if the option is not set
+     * @return bool The value of the option or the default value
      */
-    final public function getOption(string $name, bool $default = false): mixed
+    final public function getOption(string $name, bool $default = false): bool
     {
         return $this->options[$name] ?? $default;
     }

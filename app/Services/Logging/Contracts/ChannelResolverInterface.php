@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -23,7 +27,7 @@ interface ChannelResolverInterface
     /**
      * Determine the appropriate logging channel based on class namespace.
      *
-     * @param string $class The fully qualified class name
+     * @param  string  $class  The fully qualified class name
      * @return string The logging channel name
      */
     public function resolveChannel(string $class): string;
@@ -31,8 +35,7 @@ interface ChannelResolverInterface
     /**
      * Set a default channel to use when no specific channel is determined.
      *
-     * @param string $channel The default channel name
-     * @return self
+     * @param  string  $channel  The default channel name
      */
     public function setDefaultChannel(string $channel): self;
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -26,10 +30,10 @@ class SafeUpsertService
     /**
      * Handle the upsert operation for the given model and values.
      *
-     * @param Model|Builder $model The Eloquent model or query builder instance
-     * @param array $values Array of data to be inserted or updated
-     * @param array $uniqueBy Column(s) to determine uniqueness
-     * @param array|null $update Columns to be updated when a match is found
+     * @param  Model|Builder  $model  The Eloquent model or query builder instance
+     * @param  array  $values  Array of data to be inserted or updated
+     * @param  array  $uniqueBy  Column(s) to determine uniqueness
+     * @param  array|null  $update  Columns to be updated when a match is found
      * @return array Array containing counts of inserted and updated records
      */
     public static function handle(Model|Builder $model, array $values, array $uniqueBy, ?array $update = null): array
@@ -53,8 +57,8 @@ class SafeUpsertService
             ->toArray();
 
         // Separate records into those to insert and those to update
-        $toInsert = array_filter($values, fn($v) => !in_array($v[$uniqueKey], $existing));
-        $toUpdate = array_filter($values, fn($v) => in_array($v[$uniqueKey], $existing));
+        $toInsert = array_filter($values, fn ($v) => !in_array($v[$uniqueKey], $existing));
+        $toUpdate = array_filter($values, fn ($v) => in_array($v[$uniqueKey], $existing));
 
         // Insert new records and count how many were inserted
         $inserted = !empty($toInsert) && $model->newQuery()->insert($toInsert) ? count($toInsert) : 0;

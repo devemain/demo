@@ -1,5 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * 2026 DeveMain
+ *
+ * All rights reserved. For internal use only.
+ * Unauthorized copying, modification, or distribution is prohibited.
+ *
+ * @author    DeveMain <devemain@gmail.com>
+ * @copyright 2026 DeveMain
+ * @license   PROPRIETARY
+ *
+ * @link      https://github.com/DeveMain
+ */
+
 use Illuminate\Support\Str;
 
 return [
@@ -148,7 +163,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-database-'),
+            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-database-'),
             'persistent' => env('REDIS_PERSISTENT', false),
         ],
 

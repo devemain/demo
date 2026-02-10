@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -23,11 +27,11 @@ class MenuItem
     /**
      * Creates a new instance.
      *
-     * @param string $uri The URI for the menu item
-     * @param string $title The display title of the menu item
-     * @param string $icon The icon associated with the menu item
-     * @param bool $active Whether the menu item is currently active (default: false)
-     * @param array $children Array of child menu items (default: empty array)
+     * @param  string  $uri  The URI for the menu item
+     * @param  string  $title  The display title of the menu item
+     * @param  string  $icon  The icon associated with the menu item
+     * @param  bool  $active  Whether the menu item is currently active (default: false)
+     * @param  array  $children  Array of child menu items (default: empty array)
      */
     public function __construct(
         public string $uri,
@@ -43,13 +47,14 @@ class MenuItem
     /**
      * Magic getter method for accessing properties.
      *
-     * @param string $name The name of the property to get
+     * @param  string  $name  The name of the property to get
      * @return string The value of the property
+     *
      * @throws InvalidArgumentException If the property doesn't exist
      */
     public function __get(string $name): string
     {
-        return match($name) {
+        return match ($name) {
             'url' => $this->getUrl(), // Special handling for 'url' property
             default => throw new InvalidArgumentException(
                 'Property ' . $name . ' does not exist in ' . static::class
@@ -60,7 +65,7 @@ class MenuItem
     /**
      * Magic isset method for checking property existence.
      *
-     * @param string $name The name of the property to check
+     * @param  string  $name  The name of the property to check
      * @return bool True if 'url' property exists, false otherwise
      */
     public function __isset(string $name): bool
@@ -71,10 +76,10 @@ class MenuItem
     /**
      * Static factory method to create a new MenuItem instance.
      *
-     * @param string $uri The URI for the menu item
-     * @param string $title The display title of the menu item
-     * @param string $icon The icon associated with the menu item
-     * @param bool $active Whether the menu item is currently active (default: false)
+     * @param  string  $uri  The URI for the menu item
+     * @param  string  $title  The display title of the menu item
+     * @param  string  $icon  The icon associated with the menu item
+     * @param  bool  $active  Whether the menu item is currently active (default: false)
      * @return self A new instance of MenuItem
      */
     public static function make(
@@ -89,12 +94,13 @@ class MenuItem
     /**
      * Adds a child menu item to this menu item.
      *
-     * @param self $child The child menu item to add
+     * @param  self  $child  The child menu item to add
      * @return self This menu item for method chaining
      */
     public function addChild(self $child): self
     {
         $this->children[] = $child;
+
         return $this;
     }
 
@@ -121,7 +127,7 @@ class MenuItem
     /**
      * Normalizes a URI by removing leading slashes.
      *
-     * @param string $uri The URI to normalize
+     * @param  string  $uri  The URI to normalize
      * @return string The normalized URI
      */
     private function normalizeUri(string $uri): string

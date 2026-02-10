@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -68,6 +72,7 @@ class AppVersionBadge extends Component
         }
 
         $packageJson = json_decode(file_get_contents($packageJsonPath), true);
+
         return $cachedVersion = $packageJson['version'] ?? '1.0.0';
     }
 }

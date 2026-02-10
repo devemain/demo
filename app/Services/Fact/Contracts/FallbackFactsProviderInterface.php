@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -23,7 +27,7 @@ interface FallbackFactsProviderInterface
     /**
      * Get fallback facts based on language.
      *
-     * @param string $language Language code for facts (default: 'en')
+     * @param  string  $language  Language code for facts (default: 'en')
      * @return array Array of fallback facts
      */
     public function getFacts(string $language = 'en'): array;
@@ -31,7 +35,7 @@ interface FallbackFactsProviderInterface
     /**
      * Create a specific number of fallback facts.
      *
-     * @param int $count Number of facts to create
+     * @param  int  $count  Number of facts to create
      * @return array Array of fallback facts
      */
     public function createFacts(int $count = 10): array;

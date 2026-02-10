@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -35,8 +39,8 @@ class MessageFormatter implements MessageFormatterInterface
     /**
      * Format a log message with caller information.
      *
-     * @param string $message The original message
-     * @param string|null $caller The caller information (Class::method)
+     * @param  string  $message  The original message
+     * @param  string|null  $caller  The caller information (Class::method)
      * @return string The formatted message
      */
     public function format(string $message, ?string $caller = null): string
@@ -53,9 +57,8 @@ class MessageFormatter implements MessageFormatterInterface
     /**
      * Set the caller information.
      *
-     * @param string $class The full class name (with namespace)
-     * @param string $method The method name
-     * @return self
+     * @param  string  $class  The full class name (with namespace)
+     * @param  string  $method  The method name
      */
     public function setCaller(string $class, string $method): self
     {
@@ -71,12 +74,12 @@ class MessageFormatter implements MessageFormatterInterface
     /**
      * Set the separator between caller and message.
      *
-     * @param string $separator The separator string
-     * @return self
+     * @param  string  $separator  The separator string
      */
     public function setSeparator(string $separator): self
     {
         $this->separator = $separator;
+
         return $this;
     }
 }

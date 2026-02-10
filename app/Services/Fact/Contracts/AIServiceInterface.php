@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -22,7 +26,7 @@ interface AIServiceInterface
     /**
      * Generate an array of facts.
      *
-     * @param int $count Number of facts to generate
+     * @param  int  $count  Number of facts to generate
      * @return ?array Array of facts or null if failed
      */
     public function generateFactsArray(int $count = 10): ?array;

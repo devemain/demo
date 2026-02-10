@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -23,19 +27,15 @@ class ApiServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {
         // Bind API Error Handler Service as a singleton
-        $this->app->singleton(ApiErrorHandlerService::class, fn () => new ApiErrorHandlerService());
+        $this->app->singleton(ApiErrorHandlerService::class, fn () => new ApiErrorHandlerService);
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot(): void
     {

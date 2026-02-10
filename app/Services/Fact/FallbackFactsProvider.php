@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -25,7 +29,7 @@ class FallbackFactsProvider implements FallbackFactsProviderInterface
     /**
      * Get fallback facts based on language.
      *
-     * @param string $language Language code for facts (default: 'en')
+     * @param  string  $language  Language code for facts (default: 'en')
      * @return array Array of fallback facts
      */
     public function getFacts(string $language = 'en'): array
@@ -73,7 +77,7 @@ class FallbackFactsProvider implements FallbackFactsProviderInterface
                 'Значок «Сохранить» в виде дискеты — это устройство хранения данных, которым большинство современных пользователей никогда не пользовались.',
                 'Самым дорогим приложением в истории стала программа для марсохода NASA Curiosity, стоившая почти 25 миллионов долларов.',
                 'Код ошибки 404 «Not Found» назван в честь комнаты №404 в ЦЕРНе, где располагались первые веб-серверы.',
-                'Технофобия, то есть боязнь технологий, является признанным тревожным расстройством.'
+                'Технофобия, то есть боязнь технологий, является признанным тревожным расстройством.',
             ],
         ];
 
@@ -83,12 +87,13 @@ class FallbackFactsProvider implements FallbackFactsProviderInterface
     /**
      * Create a specific number of fallback facts.
      *
-     * @param int $count Number of facts to create
+     * @param  int  $count  Number of facts to create
      * @return array Array of fallback facts
      */
     public function createFacts(int $count = 10): array
     {
         $fallbackFacts = $this->getFacts();
+
         return array_slice($fallbackFacts, 0, min($count, count($fallbackFacts)));
     }
 }

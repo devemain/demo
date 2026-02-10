@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,12 +11,13 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\FactController;
 use App\Http\Controllers\Api\Admin\CronController;
+use App\Http\Controllers\Api\V1\FactController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('fact', [FactController::class, 'getRandomFact']);
@@ -23,5 +27,5 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 Route::prefix('cron')->group(function () {
     Route::post('generate-facts', [CronController::class, 'generateFacts'])->middleware('api.cron_secret');
     Route::get('generate-facts', [CronController::class, 'generateFacts']);
-//        ->middleware('api.cron_secret');
+    //        ->middleware('api.cron_secret');
 });

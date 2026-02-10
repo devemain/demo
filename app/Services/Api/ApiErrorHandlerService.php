@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -31,10 +35,10 @@ class ApiErrorHandlerService
     /**
      * Handle API errors and return a formatted JSON response.
      *
-     * @param Throwable $e The caught exception or error
-     * @param LoggerInterface $logger Service for logging errors with current state
-     * @param string $context Optional context information about where the error occurred
-     * @param int|null $statusCode Optional HTTP status code (uses default if not provided)
+     * @param  Throwable  $e  The caught exception or error
+     * @param  LoggerInterface  $logger  Service for logging errors with current state
+     * @param  string  $context  Optional context information about where the error occurred
+     * @param  int|null  $statusCode  Optional HTTP status code (uses default if not provided)
      * @return JsonResponse A JSON response containing error details
      */
     public function handleError(Throwable $e, LoggerInterface $logger, string $context = '', ?int $statusCode = null): JsonResponse
@@ -66,7 +70,7 @@ class ApiErrorHandlerService
     /**
      * Get error details array for exception.
      *
-     * @param Throwable $e The exception to get details for
+     * @param  Throwable  $e  The exception to get details for
      * @return array Array containing error details
      */
     private function getErrorDetails(Throwable $e): array

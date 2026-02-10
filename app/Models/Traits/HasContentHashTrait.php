@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -38,7 +42,7 @@ trait HasContentHashTrait
      * Normalize text before hashing.
      * Converts to lowercase, removes punctuation, and normalizes whitespace.
      *
-     * @param string $text The text to normalize
+     * @param  string  $text  The text to normalize
      * @return string The normalized text
      */
     public static function normalizeText(string $text): string
@@ -57,9 +61,10 @@ trait HasContentHashTrait
     /**
      * Generate a hash of the given content.
      *
-     * @param string $content The content to hash
-     * @param string $algo The hash algorithm to use (default: 'md5')
+     * @param  string  $content  The content to hash
+     * @param  string  $algo  The hash algorithm to use (default: 'md5')
      * @return string The generated hash
+     *
      * @throws RuntimeException If algorithm is not allowed or content is empty
      */
     public static function makeHash(string $content, string $algo = 'md5'): string

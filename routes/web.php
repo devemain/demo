@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -27,12 +31,12 @@ Route::prefix('facts')->as('facts.')->group(function () {
 });
 
 // Test
-Route::get('test', function() {
+Route::get('test', function () {
     $paths = [
         'storage' => is_writable(storage_path()),
         'storage/framework' => is_writable(storage_path('framework')),
         'storage/framework/views' => is_writable(storage_path('framework/views')),
-        'bootstrap/cache' => is_writable(base_path('bootstrap/cache'))
+        'bootstrap/cache' => is_writable(base_path('bootstrap/cache')),
     ];
 
     return view('test', ['paths' => $paths]);

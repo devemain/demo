@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -33,10 +37,10 @@ class FactController extends Controller
     /**
      * Creates a new instance.
      *
-     * @param FactService $factService Service responsible for generating facts
-     * @param FactRepositoryInterface $factRepository Repository for fact data operations
-     * @param LoggerInterface $logger Service responsible for logging activities
-     * @param ApiErrorHandlerService $errorHandler Service responsible for handling API errors
+     * @param  FactService  $factService  Service responsible for generating facts
+     * @param  FactRepositoryInterface  $factRepository  Repository for fact data operations
+     * @param  LoggerInterface  $logger  Service responsible for logging activities
+     * @param  ApiErrorHandlerService  $errorHandler  Service responsible for handling API errors
      */
     public function __construct(
         protected readonly FactService $factService,
@@ -73,7 +77,7 @@ class FactController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'No facts available in database',
-                    'hint' => 'Run cron job to generate facts first'
+                    'hint' => 'Run cron job to generate facts first',
                 ], 404);
             }
 
@@ -87,7 +91,7 @@ class FactController extends Controller
                 'meta' => [
                     'total_facts' => $this->factRepository->count(),
                     'timestamp' => Carbon::now()->toISOString(),
-                ]
+                ],
             ], options: JSON_UNESCAPED_UNICODE);
 
         } catch (Throwable $e) {
@@ -105,7 +109,7 @@ class FactController extends Controller
      * If the fact is not found, it returns a 404 response.
      * The fact is marked as shown after retrieval.
      *
-     * @param int $id The ID of the fact to retrieve
+     * @param  int  $id  The ID of the fact to retrieve
      * @return JsonResponse JSON response containing the fact or error message
      */
     public function getFactById(int $id): JsonResponse
@@ -120,7 +124,7 @@ class FactController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Fact not found'
+                'message' => 'Fact not found',
             ], 404);
         }
 

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -27,12 +31,12 @@ class GroqService implements AIServiceInterface
      * API key for authentication with the Groq API.
      */
     protected string $apiKey;
-    
+
     /**
      * Base URL for the Groq API endpoints.
      */
     protected string $apiUrl;
-    
+
     /**
      * Model name to use for the Groq API requests.
      */
@@ -41,7 +45,7 @@ class GroqService implements AIServiceInterface
     /**
      * Creates a new instance.
      *
-     * @param LoggerInterface $logger Logger service for logging API calls and errors
+     * @param  LoggerInterface  $logger  Logger service for logging API calls and errors
      */
     public function __construct(
         protected readonly LoggerInterface $logger
@@ -55,8 +59,8 @@ class GroqService implements AIServiceInterface
     /**
      * Call the Groq API with a given prompt.
      *
-     * @param string $prompt The prompt to send to the API
-     * @param int $maxTokens Maximum number of tokens in the response
+     * @param  string  $prompt  The prompt to send to the API
+     * @param  int  $maxTokens  Maximum number of tokens in the response
      * @return ?string The API response or null if failed
      */
     public function callGroqApi(string $prompt, int $maxTokens = 100): ?string
@@ -75,8 +79,8 @@ class GroqService implements AIServiceInterface
                     'messages' => [
                         [
                             'role' => 'user',
-                            'content' => $prompt
-                        ]
+                            'content' => $prompt,
+                        ],
                     ],
                     'model' => $this->model,
                     'temperature' => 0.7,
@@ -111,7 +115,7 @@ class GroqService implements AIServiceInterface
     /**
      * Create a prompt for generating technology facts.
      *
-     * @param int $count Number of facts to generate
+     * @param  int  $count  Number of facts to generate
      * @return string Formatted prompt for the API
      */
     public function createPrompt(int $count = 10): string
@@ -126,7 +130,7 @@ class GroqService implements AIServiceInterface
     /**
      * Generate an array of technology facts.
      *
-     * @param int $count Number of facts to generate
+     * @param  int  $count  Number of facts to generate
      * @return ?array Array of facts or null if failed
      */
     public function generateFactsArray(int $count = 10): ?array
@@ -173,13 +177,14 @@ class GroqService implements AIServiceInterface
     public function generateSingleFact(): ?string
     {
         $prompt = 'Generate one interesting fact about technology. One sentence only.';
+
         return $this->callGroqApi($prompt);
     }
 
     /**
      * Clean and format the API response.
      *
-     * @param ?string $response The raw response from API
+     * @param  ?string  $response  The raw response from API
      * @return ?string Cleaned response or null if input is null
      */
     protected function cleanResponse(?string $response): ?string
@@ -205,6 +210,7 @@ class GroqService implements AIServiceInterface
     public function testConnection(): bool
     {
         $response = $this->callGroqApi('Say "OK" if you are working.', 10);
+
         return !empty($response) && stripos($response, 'OK') !== false;
     }
 }

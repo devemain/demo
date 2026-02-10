@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -22,11 +26,6 @@ use Devemain\Traits\CommandOptionsTrait;
 class CliHelper
 {
     use CommandOptionsTrait;
-
-    /**
-     * Constant for double line break (two PHP_EOLs).
-     */
-    public const string PHP_EOL2 = PHP_EOL . PHP_EOL;
 
     /**
      * Constants for CLI color codes.
@@ -58,8 +57,8 @@ class CliHelper
     /**
      * Apply color to text if color is supported. Otherwise, return original text.
      *
-     * @param string $text The text to color
-     * @param string|null $color The color to apply
+     * @param  string  $text  The text to color
+     * @param  string|null  $color  The color to apply
      * @return string The colored text or original text if color is not supported
      */
     private static function color(string $text, ?string $color = null): string
@@ -87,25 +86,25 @@ class CliHelper
     /**
      * Print colored text to console. If color is not supported, print plain text.
      *
-     * @param string $text The text to print
-     * @param string $color The color to use
-     * @param bool $frame Whether to frame the text
-     * @param string|null $icon Icon to display before text
+     * @param  string  $text  The text to print
+     * @param  string  $color  The color to use
+     * @param  bool  $frame  Whether to frame the text
+     * @param  string|null  $icon  Icon to display before text
      */
     public static function print(string $text, string $color = 'white', bool $frame = false, ?string $icon = null): void
     {
         if ($frame) {
             self::frameMiddle($text, $color, $icon);
         } else {
-            echo self::color(($icon ? $icon . ' ' : '') . $text, $color) . PHP_EOL;
+            echo self::color(($icon ? $icon . ' ' : '') . $text, $color) . Fmt::EOL;
         }
     }
 
     /**
      * Print error message in red.
      *
-     * @param string $text The error message
-     * @param bool $frame Whether to frame the text
+     * @param  string  $text  The error message
+     * @param  bool  $frame  Whether to frame the text
      */
     public static function error(string $text, bool $frame = false): void
     {
@@ -115,8 +114,8 @@ class CliHelper
     /**
      * Print success message in green.
      *
-     * @param string $text The success message
-     * @param bool $frame Whether to frame the text
+     * @param  string  $text  The success message
+     * @param  bool  $frame  Whether to frame the text
      */
     public static function success(string $text, bool $frame = false): void
     {
@@ -126,8 +125,8 @@ class CliHelper
     /**
      * Print warning message in yellow.
      *
-     * @param string $text The warning message
-     * @param bool $frame Whether to frame the text
+     * @param  string  $text  The warning message
+     * @param  bool  $frame  Whether to frame the text
      */
     public static function warning(string $text, bool $frame = false): void
     {
@@ -137,8 +136,8 @@ class CliHelper
     /**
      * Print info message in blue.
      *
-     * @param string $text The info message
-     * @param bool $frame Whether to frame the text
+     * @param  string  $text  The info message
+     * @param  bool  $frame  Whether to frame the text
      */
     public static function info(string $text, bool $frame = false): void
     {
@@ -148,8 +147,8 @@ class CliHelper
     /**
      * Print loading message in magenta.
      *
-     * @param string $text The loading message
-     * @param bool $frame Whether to frame the text
+     * @param  string  $text  The loading message
+     * @param  bool  $frame  Whether to frame the text
      */
     public static function loading(string $text, bool $frame = false): void
     {
@@ -159,9 +158,9 @@ class CliHelper
     /**
      * Print framed text.
      *
-     * @param string $text The text to frame
-     * @param string $color The color to use
-     * @param string|null $icon Icon to display in the frame
+     * @param  string  $text  The text to frame
+     * @param  string  $color  The color to use
+     * @param  string|null  $icon  Icon to display in the frame
      */
     public static function frame(string $text, string $color = 'cyan', ?string $icon = null): void
     {
@@ -173,7 +172,7 @@ class CliHelper
     /**
      * Print top frame border.
      *
-     * @param string $color The color to use
+     * @param  string  $color  The color to use
      */
     public static function frameTop(string $color = 'cyan'): void
     {
@@ -183,22 +182,22 @@ class CliHelper
     /**
      * Print middle frame with text.
      *
-     * @param string $text The text to display
-     * @param string $color The color to use
-     * @param string|null $icon Icon to display before text
+     * @param  string  $text  The text to display
+     * @param  string  $color  The color to use
+     * @param  string|null  $icon  Icon to display before text
      */
     public static function frameMiddle(string $text, string $color = 'white', ?string $icon = null): void
     {
         $text = $icon ? $icon . ' ' . $text : $text;
         $length = $icon ? 76 : 74;
 
-        echo sprintf(self::color('│   %-' . $length . 's    │', $color), $text) . PHP_EOL;
+        echo sprintf(self::color('│   %-' . $length . 's    │', $color), $text) . Fmt::EOL;
     }
 
     /**
      * Print bottom frame border.
      *
-     * @param string $color The color to use
+     * @param  string  $color  The color to use
      */
     public static function frameBottom(string $color = 'cyan'): void
     {
@@ -208,7 +207,7 @@ class CliHelper
     /**
      * Print separator line.
      *
-     * @param string $color The color to use
+     * @param  string  $color  The color to use
      */
     public static function separator(string $color = 'white'): void
     {
@@ -218,8 +217,8 @@ class CliHelper
     /**
      * Print directory name in blue.
      *
-     * @param string $dir The directory path
-     * @param bool $frame Whether to frame the text
+     * @param  string  $dir  The directory path
+     * @param  bool  $frame  Whether to frame the text
      */
     public static function dir(string $dir, bool $frame = false): void
     {
@@ -229,8 +228,8 @@ class CliHelper
     /**
      * Print file name with extension.
      *
-     * @param string $file The file path
-     * @param bool $frame Whether to frame the text
+     * @param  string  $file  The file path
+     * @param  bool  $frame  Whether to frame the text
      */
     public static function file(string $file, bool $frame = false): void
     {
@@ -241,7 +240,7 @@ class CliHelper
     /**
      * Display help information.
      *
-     * @param string $script The script name
+     * @param  string  $script  The script name
      */
     public static function showHelp(string $script): void
     {
@@ -256,7 +255,7 @@ class CliHelper
     /**
      * Execute command line operations.
      *
-     * @param array $argv Command line arguments
+     * @param  array  $argv  Command line arguments
      */
     public function execute(array $argv): void
     {

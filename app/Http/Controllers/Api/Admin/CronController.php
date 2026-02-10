@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -30,9 +34,9 @@ class CronController extends Controller
     /**
      * Creates a new instance.
      *
-     * @param FactService $factService Service responsible for generating facts
-     * @param LoggerInterface $logger Service responsible for logging activities
-     * @param ApiErrorHandlerService $errorHandler Service responsible for handling API errors
+     * @param  FactService  $factService  Service responsible for generating facts
+     * @param  LoggerInterface  $logger  Service responsible for logging activities
+     * @param  ApiErrorHandlerService  $errorHandler  Service responsible for handling API errors
      */
     public function __construct(
         protected readonly FactService $factService,
@@ -46,7 +50,7 @@ class CronController extends Controller
      * This method handles the request to generate facts. It logs the request details,
      * attempts to generate facts, and returns a JSON response with the results.
      *
-     * @param Request $request The incoming HTTP request
+     * @param  Request  $request  The incoming HTTP request
      * @return JsonResponse JSON response containing either the generated facts or an error message
      */
     public function generateFacts(Request $request): JsonResponse
@@ -74,7 +78,7 @@ class CronController extends Controller
                     'count' => count($generated),
                     'facts' => $generated,
                     'timestamp' => Carbon::now()->toISOString(),
-                ]
+                ],
             ]);
 
         } catch (Throwable $e) {

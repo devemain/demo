@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -38,7 +42,7 @@ class LicenseManager
     /**
      * Creates a new instance.
      *
-     * @param CliHelper $cli CLI helper instance for console output
+     * @param  CliHelper  $cli  CLI helper instance for console output
      */
     public function __construct(
         private readonly CliHelper $cli

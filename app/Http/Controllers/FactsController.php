@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -43,8 +47,8 @@ class FactsController extends Controller
     /**
      * Creates a new instance.
      *
-     * @param FactService $factService Service for fact generation and business logic
-     * @param FactRepositoryInterface $factRepository Repository for fact data operations
+     * @param  FactService  $factService  Service for fact generation and business logic
+     * @param  FactRepositoryInterface  $factRepository  Repository for fact data operations
      */
     public function __construct(
         protected readonly FactService $factService,
@@ -54,7 +58,7 @@ class FactsController extends Controller
     /**
      * Display a paginated list of all facts.
      *
-     * @param Request $request The incoming HTTP request containing pagination parameters
+     * @param  Request  $request  The incoming HTTP request containing pagination parameters
      * @return View The view displaying the facts list
      */
     public function index(Request $request): View
@@ -114,7 +118,7 @@ class FactsController extends Controller
     /**
      * Search facts based on query string.
      *
-     * @param Request $request The incoming HTTP request containing search parameters
+     * @param  Request  $request  The incoming HTTP request containing search parameters
      * @return View|RedirectResponse The search results view or redirect to index if no query
      */
     public function search(Request $request): View|RedirectResponse

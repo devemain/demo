@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * 2026 DeveMain
  *
@@ -8,6 +11,7 @@
  * @author    DeveMain <devemain@gmail.com>
  * @copyright 2026 DeveMain
  * @license   PROPRIETARY
+ *
  * @link      https://github.com/DeveMain
  */
 
@@ -43,7 +47,7 @@ class ConfigDeployer
     /**
      * Creates a new instance.
      *
-     * @param CliHelper $cli CLI helper instance for output operations
+     * @param  CliHelper  $cli  CLI helper instance for output operations
      */
     public function __construct(
         private readonly CliHelper $cli
@@ -83,17 +87,23 @@ class ConfigDeployer
      * Recursively processes a directory and its contents, deploying files
      * to their target locations.
      *
-     * @param string $dir Directory to process
-     * @param string $basePath Base path for relative path calculation
+     * @param  string  $dir  Directory to process
+     * @param  string  $basePath  Base path for relative path calculation
      */
     private function processDeployment(string $dir, string $basePath = ''): void
     {
         if (!is_dir($dir)) {
             $this->errors[] = 'Source directory not found: ' . $dir;
+
             return;
         }
 
         $files = scandir($dir);
+        if ($files === false) {
+            $this->errors[] = 'Failed to scan directory: ' . $dir;
+
+            return;
+        }
 
         foreach ($files as $file) {
             if ($file === '.' || $file === '..') {
@@ -117,17 +127,23 @@ class ConfigDeployer
      * Recursively processes a directory and its contents, removing files
      * that match the source files.
      *
-     * @param string $dir Directory to process
-     * @param string $basePath Base path for relative path calculation
+     * @param  string  $dir  Directory to process
+     * @param  string  $basePath  Base path for relative path calculation
      */
     private function processRemoval(string $dir, string $basePath = ''): void
     {
         if (!is_dir($dir)) {
             $this->errors[] = 'Source directory not found: ' . $dir;
+
             return;
         }
 
         $files = scandir($dir);
+        if ($files === false) {
+            $this->errors[] = 'Failed to scan directory: ' . $dir;
+
+            return;
+        }
 
         foreach ($files as $file) {
             if ($file === '.' || $file === '..') {
@@ -151,8 +167,8 @@ class ConfigDeployer
      * Creates target directories if needed and copies the source file
      * to the target location.
      *
-     * @param string $source Source file path
-     * @param string $relativePath Relative path for the target file
+     * @param  string  $source  Source file path
+     * @param  string  $relativePath  Relative path for the target file
      */
     private function deployFile(string $source, string $relativePath): void
     {
@@ -163,6 +179,7 @@ class ConfigDeployer
         if (!is_dir($targetDir)) {
             if (!mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
                 $this->errors[] = 'Failed to create directory: ' . $targetDir;
+
                 return;
             }
             $this->cli->info('Created directory: ' . $targetDir, true);
@@ -171,16 +188,21 @@ class ConfigDeployer
         // Check if source file exists
         if (!file_exists($source)) {
             $this->errors[] = 'Source file not found: ' . $source;
+
             return;
         }
 
-        // Check if target file exists
-        if (file_exists($target) && $this->isFileFromSource($source, $target)) {
-            $this->errors[] = 'Target file already exists: ' . $target;
-            return;
-        } elseif (!$this->cli->hasOption('force') || $relativePath === 'package.json') {
-            $this->cli->warning('File was modified, skipping: ' . $target, true);
-            return;
+        // Check if target file exists and is from source
+        if (file_exists($target)) {
+            if ($this->isFileFromSource($source, $target)) {
+                $this->errors[] = 'Target file already exists: ' . $target;
+
+                return;
+            } elseif (!$this->cli->hasOption('force') || $relativePath === 'package.json') {
+                $this->cli->warning('File was modified, skipping: ' . $target, true);
+
+                return;
+            }
         }
 
         // Copy the file
@@ -198,8 +220,8 @@ class ConfigDeployer
      * Checks if the file can be safely removed and removes it if possible.
      * Also removes empty parent directories after file removal.
      *
-     * @param string $source Source file path
-     * @param string $relativePath Relative path for the target file
+     * @param  string  $source  Source file path
+     * @param  string  $relativePath  Relative path for the target file
      */
     private function removeFile(string $source, string $relativePath): void
     {
@@ -208,22 +230,25 @@ class ConfigDeployer
         // Check if target file exists
         if (!file_exists($target)) {
             $this->cli->info('File not found, skipping: ' . $relativePath, true);
+
             return;
         }
 
         // Check if file was originally from our source
-        if ($this->isFileFromSource($source, $target)) {
-            if (unlink($target)) {
-                $this->cli->file($relativePath, true);
-                $this->removed[] = $relativePath;
-
-                // Remove empty parent directories
-                $this->removeEmptyDirectories(dirname($target));
-            } else {
-                $this->errors[] = 'Failed to remove: ' . $relativePath;
-            }
-        } else {
+        if (!$this->isFileFromSource($source, $target)) {
             $this->cli->warning('File was modified, skipping: ' . $relativePath, true);
+
+            return;
+        }
+
+        if (unlink($target)) {
+            $this->cli->file($relativePath, true);
+            $this->removed[] = $relativePath;
+
+            // Remove empty parent directories
+            $this->removeEmptyDirectories(dirname($target));
+        } else {
+            $this->errors[] = 'Failed to remove: ' . $relativePath;
         }
     }
 
@@ -233,8 +258,8 @@ class ConfigDeployer
      * Compares the contents of the source and target files to determine
      * if they are identical.
      *
-     * @param string $source Source file path
-     * @param string $target Target file path
+     * @param  string  $source  Source file path
+     * @param  string  $target  Target file path
      * @return bool True if files match, false otherwise
      */
     private function isFileFromSource(string $source, string $target): bool
@@ -251,19 +276,21 @@ class ConfigDeployer
      *
      * Recursively removes empty directories starting from the given directory.
      *
-     * @param string $dir Directory to check and potentially remove
+     * @param  string  $dir  Directory to check and potentially remove
      */
     private function removeEmptyDirectories(string $dir): void
     {
-        // Remove directory if it's empty and not the root
-        if ($dir !== '.' && $dir !== '..' && is_dir($dir)) {
-            if (count(scandir($dir)) === 2) { // Only . and ..
-                rmdir($dir);
-                $this->cli->info('Removed empty directory: ' . $dir, true);
+        // Stop if we've reached root or invalid directory
+        if ($dir === '.' || $dir === '..' || !is_dir($dir)) {
+            return;
+        }
 
-                // Recursively check parent directory
-                $this->removeEmptyDirectories(dirname($dir));
-            }
+        // Remove directory if it's empty (only . and ..)
+        if (count(scandir($dir)) === 2 && rmdir($dir)) {
+            $this->cli->info('Removed empty directory: ' . $dir, true);
+
+            // Recursively check parent directory
+            $this->removeEmptyDirectories(dirname($dir));
         }
     }
 
