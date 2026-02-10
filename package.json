@@ -1,6 +1,6 @@
 {
     "name": "devemain",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",

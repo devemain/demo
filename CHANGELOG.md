@@ -1,3 +1,9 @@
+## [1.2.4](https://github.com/devemain/demo/compare/v1.2.3...v1.2.4) (2026-02-10)
+
+### 🔧 Refactoring
+
+* enforce strict types and code formatting ([b492b08](https://github.com/devemain/demo/commit/b492b08c87b754b1ed2d9a7ba4f857a3e076b79e))
+
 ## [1.2.3](https://github.com/devemain/demo/compare/v1.2.2...v1.2.3) (2026-02-02)
 
 ### 💄 Styling
